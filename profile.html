@@ -53,7 +53,7 @@
 
     <script src="/js/config.js"></script>
     <script>
-        // --- PROFILE DATA LOADING ---
+        // --- PROFILE DATA LOADING (SEM ICONMAP) ---
         (function loadProfile() {
             var user = sessionStorage.getItem('whbf_user') || 'under';
             var profile = PROFILES[user];
@@ -73,22 +73,24 @@
             var container = document.getElementById('buttons-container');
             container.innerHTML = '';
 
-            var iconMap = {
-                discord: 'https://cdn.simpleicons.org/discord/8a0002',
-                telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
-                gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
-                instagram: 'https://cdn.simpleicons.org/instagram/8a0002',
-                twitter: 'https://cdn.simpleicons.org/twitter/8a0002',
-                youtube: 'https://cdn.simpleicons.org/youtube/8a0002',
-                github: 'https://cdn.simpleicons.org/github/8a0002'
-            };
-
             profile.buttons.forEach(function(btn) {
                 var div = document.createElement('div');
                 div.className = 'btn';
-                div.dataset.copy = btn.label;
-                div.innerHTML = '<div class="icon"><img src="' + (iconMap[btn.icon] || iconMap.gmail) + '" alt="' + btn.icon + '"></div>';
-                container.appendChild(div);
+                
+                // Se for link (URL), abre em nova aba
+                if (btn.label.startsWith('http://') || btn.label.startsWith('https://')) {
+                    var a = document.createElement('a');
+                    a.href = btn.label;
+                    a.target = '_blank';
+                    a.className = 'btn';
+                    a.innerHTML = '<div class="icon"><img src="' + btn.icon + '" alt="ícone"></div>';
+                    container.appendChild(a);
+                } else {
+                    // Senão, é copy
+                    div.dataset.copy = btn.label;
+                    div.innerHTML = '<div class="icon"><img src="' + btn.icon + '" alt="ícone"></div>';
+                    container.appendChild(div);
+                }
             });
         })();
     </script>
