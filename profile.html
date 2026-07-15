@@ -38,14 +38,25 @@
     <audio id="bg-music" src="" loop></audio>
     
     <script>
-        // --- RESTAURAR URL (Remove ?user= e mantém o caminho limpo) ---
-        (function restoreURL() {
-            const params = new URLSearchParams(window.location.search);
-            const user = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
-            if (params.has('user')) {
+        // --- DETECTAR O CAMINHO REAL (mesmo com 404) ---
+        (function detectPath() {
+            var path = window.location.pathname;
+            var user = path.split('/').filter(Boolean)[0];
+            
+            if (user && user !== 'profile.html' && user !== 'index.html') {
+                // Se o caminho tem um nome (ex: /under), guarda-o
                 sessionStorage.setItem('whbf_user', user);
-                const cleanPath = '/' + user + '/';
-                window.history.replaceState({}, '', cleanPath);
+                // Remove o caminho do URL (volta para a raiz)
+                window.history.replaceState({}, '', '/');
+            } else {
+                // Se não tem, tenta buscar do sessionStorage ou URL params
+                var params = new URLSearchParams(window.location.search);
+                var userFromParams = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
+                sessionStorage.setItem('whbf_user', userFromParams);
+                // Limpa os parâmetros da URL
+                if (params.has('user')) {
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
             }
         })();
     </script>
@@ -54,8 +65,8 @@
     <script>
         // --- PROFILE DATA LOADING ---
         (function loadProfile() {
-            const user = sessionStorage.getItem('whbf_user') || 'under';
-            const profile = PROFILES[user];
+            var user = sessionStorage.getItem('whbf_user') || 'under';
+            var profile = PROFILES[user];
 
             if (!profile) {
                 window.location.href = 'https://whbf.cc';
@@ -69,10 +80,10 @@
             document.getElementById('profile-group').textContent = `- ${profile.group} -`;
             document.getElementById('bg-music').src = profile.music;
 
-            const container = document.getElementById('buttons-container');
+            var container = document.getElementById('buttons-container');
             container.innerHTML = '';
 
-            const iconMap = {
+            var iconMap = {
                 discord: 'https://cdn.simpleicons.org/discord/8a0002',
                 telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
                 gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
@@ -82,11 +93,11 @@
                 github: 'https://cdn.simpleicons.org/github/8a0002'
             };
 
-            profile.buttons.forEach(btn => {
-                const div = document.createElement('div');
+            profile.buttons.forEach(function(btn) {
+                var div = document.createElement('div');
                 div.className = 'btn';
                 div.dataset.copy = btn.label;
-                div.innerHTML = `<div class="icon"><img src="${iconMap[btn.icon] || iconMap.gmail}" alt="${btn.icon}"></div>`;
+                div.innerHTML = '<div class="icon"><img src="' + (iconMap[btn.icon] || iconMap.gmail) + '" alt="' + btn.icon + '"></div>';
                 container.appendChild(div);
             });
         })();
@@ -95,21 +106,21 @@
     <script>
         // --- ENTER SCREEN LOGIC ---
         (function setupEnterScreen() {
-            const enterScreen = document.getElementById('enter-screen');
-            const music = document.getElementById('bg-music');
+            var enterScreen = document.getElementById('enter-screen');
+            var music = document.getElementById('bg-music');
             
             if (!enterScreen) return;
             
             enterScreen.addEventListener('click', function() {
                 if (music) {
                     music.volume = 0.1;
-                    music.play().catch(() => {});
+                    music.play().catch(function() {});
                 }
                 this.style.opacity = '0';
                 this.style.pointerEvents = 'none';
-                setTimeout(() => {
+                setTimeout(function() {
                     if (this.parentNode) this.remove();
-                }, 500);
+                }.bind(this), 500);
             });
         })();
     </script>
