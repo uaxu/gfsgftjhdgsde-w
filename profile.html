@@ -53,6 +53,41 @@
 
     <script src="/js/config.js"></script>
     <script>
+        // --- MAPA DE ÍCONES (converte nome -> URL) ---
+        var iconMap = {
+            discord: 'https://cdn.simpleicons.org/discord/8a0002',
+            telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
+            instagram: 'https://cdn.simpleicons.org/instagram/8a0002',
+            twitter: 'https://cdn.simpleicons.org/twitter/8a0002',
+            youtube: 'https://cdn.simpleicons.org/youtube/8a0002',
+            github: 'https://cdn.simpleicons.org/github/8a0002',
+            tiktok: 'https://cdn.simpleicons.org/tiktok/8a0002',
+            snapchat: 'https://cdn.simpleicons.org/snapchat/8a0002',
+            pinterest: 'https://cdn.simpleicons.org/pinterest/8a0002',
+            spotify: 'https://cdn.simpleicons.org/spotify/8a0002',
+            steam: 'https://cdn.simpleicons.org/steam/8a0002',
+            roblox: 'https://cdn.simpleicons.org/roblox/8a0002',
+            onlyfans: 'https://cdn.simpleicons.org/onlyfans/8a0002',
+            gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
+            bitcoin: 'https://cdn.simpleicons.org/bitcoin/8a0002',
+            ethereum: 'https://cdn.simpleicons.org/ethereum/8a0002',
+            litecoin: 'https://cdn.simpleicons.org/litecoin/8a0002',
+            solana: 'https://cdn.simpleicons.org/solana/8a0002',
+            polygon: 'https://cdn.simpleicons.org/gmail/8a0002',
+            namemc: 'https://cdn.simpleicons.org/gmail/8a0002',
+            spacehey: 'https://cdn.simpleicons.org/gmail/8a0002'
+        };
+
+        // --- FUNÇÃO PARA OBTER URL DO ÍCONE ---
+        function getIconUrl(icon) {
+            // Se já for uma URL (começa com http), usa diretamente
+            if (icon.startsWith('http://') || icon.startsWith('https://')) {
+                return icon;
+            }
+            // Senão, procura no mapa
+            return iconMap[icon] || iconMap.gmail;
+        }
+
         // --- PROFILE DATA LOADING ---
         (function loadProfile() {
             var user = sessionStorage.getItem('whbf_user') || 'under';
@@ -67,33 +102,33 @@
             document.getElementById('profile-img').src = profile.image;
             document.getElementById('profile-img').alt = profile.name;
             document.getElementById('profile-name').textContent = profile.name;
-            document.getElementById('profile-group').textContent = `- ${profile.group} -`;
+            document.getElementById('profile-group').textContent = '- ' + profile.group + ' -';
             document.getElementById('bg-music').src = profile.music;
 
             var container = document.getElementById('buttons-container');
             container.innerHTML = '';
 
             profile.buttons.forEach(function(btn) {
-                var div = document.createElement('div');
-                div.className = 'btn';
+                var iconUrl = getIconUrl(btn.icon);
+                var isLink = btn.label.startsWith('http://') || btn.label.startsWith('https://');
                 
-                // Se for link (URL), abre em nova aba
-                if (btn.label.startsWith('http://') || btn.label.startsWith('https://')) {
+                if (isLink) {
                     var a = document.createElement('a');
                     a.href = btn.label;
                     a.target = '_blank';
                     a.className = 'btn';
-                    a.innerHTML = '<div class="icon"><img src="' + btn.icon + '" alt="ícone"></div>';
+                    a.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
                     container.appendChild(a);
                 } else {
-                    // Senão, é copy
+                    var div = document.createElement('div');
+                    div.className = 'btn';
                     div.dataset.copy = btn.label;
-                    div.innerHTML = '<div class="icon"><img src="' + btn.icon + '" alt="ícone"></div>';
+                    div.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
                     container.appendChild(div);
                 }
             });
 
-            // --- ADICIONAR EVENT LISTENERS DE COPY DEPOIS DOS BOTÕES SEREM CRIADOS ---
+            // --- ADICIONAR EVENT LISTENERS DE COPY ---
             setupCopyListeners();
         })();
 
@@ -102,55 +137,57 @@
             var warning = document.getElementById('copy-warning');
             if (!warning) return;
 
-            document.querySelectorAll('[data-copy]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var text = this.dataset.copy;
-                    
-                    // Tentar copiar usando a API moderna
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(text).then(function() {
-                            showCopyWarning(warning);
-                            flashButton(this);
-                        }.bind(this)).catch(function() {
-                            fallbackCopy(text, warning, this);
-                        }.bind(this));
-                    } else {
-                        fallbackCopy(text, warning, this);
-                    }
-                });
+            var copyButtons = document.querySelectorAll('[data-copy]');
+            
+            copyButtons.forEach(function(btn) {
+                // Remover listeners antigos para evitar duplicação
+                btn.removeEventListener('click', handleCopy);
+                btn.addEventListener('click', handleCopy);
             });
-        }
 
-        // --- MOSTRAR WARNING ---
-        function showCopyWarning(warning) {
-            warning.classList.add('show');
-            setTimeout(function() {
-                warning.classList.remove('show');
-            }, 1000);
-        }
-
-        // --- FLASH NO BOTÃO ---
-        function flashButton(btn) {
-            btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
-            setTimeout(function() {
-                btn.style.boxShadow = '';
-            }, 300);
-        }
-
-        // --- MÉTODO FALLBACK PARA COPY ---
-        function fallbackCopy(text, warning, btn) {
-            var textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showCopyWarning(warning);
-                flashButton(btn);
-            } catch (err) {
-                console.error('Falha ao copiar:', err);
+            function handleCopy(e) {
+                var btn = e.currentTarget;
+                var text = btn.dataset.copy;
+                
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text).then(function() {
+                        showCopyWarning();
+                        flashButton(btn);
+                    }).catch(function() {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
             }
-            textArea.remove();
+
+            function showCopyWarning() {
+                warning.classList.add('show');
+                setTimeout(function() {
+                    warning.classList.remove('show');
+                }, 1000);
+            }
+
+            function flashButton(btn) {
+                btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+                setTimeout(function() {
+                    btn.style.boxShadow = '';
+                }, 300);
+            }
+
+            function fallbackCopy(text) {
+                var textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyWarning();
+                } catch (err) {
+                    console.error('Falha ao copiar:', err);
+                }
+                textArea.remove();
+            }
         }
     </script>
 
