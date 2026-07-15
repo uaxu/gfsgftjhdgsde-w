@@ -216,10 +216,7 @@ const PROFILES = {
         image: '/assets/hxart.png',
         music: '/assets/hxart.mp3',
         titleAnimation: ['h','hx','hxa','hxar','hxart','hxar','hxa','hx'],
-        buttons: [
-            { icon: 'discord', label: '2lxprz' },
-            { icon: 'telegram', label: 'https://t.me/fourciuy' }
-        ]
+        buttons: []
     },
     '404': {
         name: '404',
