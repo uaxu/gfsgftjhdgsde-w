@@ -29,55 +29,79 @@
     </div>
     <div id="copy-warning">The text was copied!</div>
     <audio id="bg-music" src="" loop></audio>
+    
     <script src="/js/config.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let user = sessionStorage.getItem('whbf_user');
-            
-            if (!user) {
-                const params = new URLSearchParams(window.location.search);
-                user = params.get('user') || 'under';
-            }
-            
-            const profile = PROFILES[user];
+        // Load profile data
+        let user = sessionStorage.getItem('whbf_user');
+        
+        if (!user) {
+            const params = new URLSearchParams(window.location.search);
+            user = params.get('user') || 'under';
+        }
+        
+        const profile = PROFILES[user];
 
-            if (!profile) {
-                window.location.href = 'https://whbf.cc';
-                return;
-            }
+        if (!profile) {
+            window.location.href = 'https://whbf.cc';
+        }
 
-            document.getElementById('page-title').textContent = profile.name;
-            document.getElementById('profile-img').src = profile.image;
-            document.getElementById('profile-img').alt = profile.name;
-            document.getElementById('profile-name').textContent = profile.name;
-            document.getElementById('profile-group').textContent = `- ${profile.group} -`;
-            document.getElementById('bg-music').src = profile.music;
+        // Set profile data
+        document.getElementById('page-title').textContent = profile.name;
+        document.getElementById('profile-img').src = profile.image;
+        document.getElementById('profile-img').alt = profile.name;
+        document.getElementById('profile-name').textContent = profile.name;
+        document.getElementById('profile-group').textContent = `- ${profile.group} -`;
+        document.getElementById('bg-music').src = profile.music;
 
-            const container = document.getElementById('buttons-container');
-            container.innerHTML = '';
+        // Generate buttons
+        const container = document.getElementById('buttons-container');
+        container.innerHTML = '';
 
-            const iconMap = {
-                discord: 'https://cdn.simpleicons.org/discord/8a0002',
-                telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
-                gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
-                instagram: 'https://cdn.simpleicons.org/instagram/8a0002',
-                twitter: 'https://cdn.simpleicons.org/twitter/8a0002',
-                youtube: 'https://cdn.simpleicons.org/youtube/8a0002',
-                github: 'https://cdn.simpleicons.org/github/8a0002'
-            };
+        const iconMap = {
+            discord: 'https://cdn.simpleicons.org/discord/8a0002',
+            telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
+            gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
+            instagram: 'https://cdn.simpleicons.org/instagram/8a0002',
+            twitter: 'https://cdn.simpleicons.org/twitter/8a0002',
+            youtube: 'https://cdn.simpleicons.org/youtube/8a0002',
+            github: 'https://cdn.simpleicons.org/github/8a0002'
+        };
 
-            profile.buttons.forEach(btn => {
-                const div = document.createElement('div');
-                div.className = 'btn';
-                div.dataset.copy = btn.label;
-                div.innerHTML = `<div class="icon"><img src="${iconMap[btn.icon] || iconMap.gmail}" alt="${btn.icon}"></div>`;
-                container.appendChild(div);
-            });
-
-            const script = document.createElement('script');
-            script.src = '/js/main.js';
-            document.body.appendChild(script);
+        profile.buttons.forEach(btn => {
+            const div = document.createElement('div');
+            div.className = 'btn';
+            div.dataset.copy = btn.label;
+            div.innerHTML = `<div class="icon"><img src="${iconMap[btn.icon] || iconMap.gmail}" alt="${btn.icon}"></div>`;
+            container.appendChild(div);
         });
     </script>
+    
+    <script>
+        // --- ENTRY + MUSIC (FIXED - Runs AFTER everything is loaded) ---
+        (function() {
+            const enterScreen = document.getElementById('enter-screen');
+            const music = document.getElementById('bg-music');
+            
+            if (music) {
+                music.volume = 0.1;
+                
+                // Function to handle enter click
+                function handleEnterClick() {
+                    music.play().catch(() => {});
+                    enterScreen.style.opacity = '0';
+                    enterScreen.style.pointerEvents = 'none';
+                    setTimeout(() => enterScreen.remove(), 400);
+                }
+                
+                // Add click listener
+                if (enterScreen) {
+                    enterScreen.addEventListener('click', handleEnterClick);
+                }
+            }
+        })();
+    </script>
+    
+    <script src="/js/main.js"></script>
 </body>
 </html>
