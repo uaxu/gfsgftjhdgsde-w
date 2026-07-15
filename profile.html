@@ -38,25 +38,18 @@
     <audio id="bg-music" src="" loop></audio>
     
     <script>
-        // --- DETECTAR O CAMINHO REAL (mesmo com 404) ---
-        (function detectPath() {
-            var path = window.location.pathname;
-            var user = path.split('/').filter(Boolean)[0];
+        // --- RESTAURAR URL PARA /user/ (SEM ?user=) ---
+        (function restoreURL() {
+            var params = new URLSearchParams(window.location.search);
+            var user = params.get('user');
             
-            if (user && user !== 'profile.html' && user !== 'index.html') {
-                // Se o caminho tem um nome (ex: /under), guarda-o
+            if (user) {
+                // Guarda o user no sessionStorage
                 sessionStorage.setItem('whbf_user', user);
-                // Remove o caminho do URL (volta para a raiz)
-                window.history.replaceState({}, '', '/');
-            } else {
-                // Se não tem, tenta buscar do sessionStorage ou URL params
-                var params = new URLSearchParams(window.location.search);
-                var userFromParams = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
-                sessionStorage.setItem('whbf_user', userFromParams);
-                // Limpa os parâmetros da URL
-                if (params.has('user')) {
-                    window.history.replaceState({}, '', window.location.pathname);
-                }
+                // Cria o caminho limpo: /user/
+                var cleanPath = '/' + user + '/';
+                // Substitui a URL sem recarregar a página
+                window.history.replaceState({}, '', cleanPath);
             }
         })();
     </script>
