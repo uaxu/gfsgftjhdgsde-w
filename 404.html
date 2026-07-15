@@ -26,13 +26,19 @@
 </head>
 <body>
     <div class="loader">❆</div>
+    <script src="/js/config.js"></script>
     <script>
-        // Guarda o utilizador do caminho 404
-        var path = window.location.pathname;
-        var user = path.split('/').filter(Boolean)[0] || 'under';
-        sessionStorage.setItem('whbf_user', user);
-        // Redireciona para a raiz
-        window.location.replace('/');
+        (function() {
+            var path = window.location.pathname;
+            var user = path.split('/').filter(Boolean)[0] || '';
+            
+            if (user && PROFILES[user]) {
+                sessionStorage.setItem('whbf_user', user);
+                window.location.replace('/profile.html?user=' + user);
+            } else {
+                window.location.replace('/');
+            }
+        })();
     </script>
 </body>
 </html>
