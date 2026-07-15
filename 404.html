@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -26,13 +27,12 @@
 <body>
     <div class="loader">❆</div>
     <script>
-        (function() {
-            var path = window.location.pathname;
-            var user = path.split('/').filter(Boolean)[0] || 'under';
-            sessionStorage.setItem('whbf_user', user);
-            var redirectUrl = '/?user=' + user;
-            window.location.replace(redirectUrl);
-        })();
+        // Guarda o utilizador do caminho 404
+        var path = window.location.pathname;
+        var user = path.split('/').filter(Boolean)[0] || 'under';
+        sessionStorage.setItem('whbf_user', user);
+        // Redireciona para a raiz
+        window.location.replace('/');
     </script>
 </body>
 </html>
