@@ -88,17 +88,6 @@ const PROFILES = {
             { icon: 'onlyfans', label: 'https://whbf.cc/discord' }
         ]
     },
-    zero: {
-        name: 'zero',
-        group: 'Sancta',
-        image: '/assets/zero.png',
-        music: '/assets/zero.mp3',
-        titleAnimation: ['z','ze','zer','zero','zer','ze'],
-        buttons: [
-            { icon: 'roblox', label: 'https://roblox.com/users/8524145/profile' },
-            { icon: 'github', label: 'https://github.com/luciferinprod' }
-        ]
-    },
     cae: {
         name: 'cae',
         group: 'Sancta',
@@ -130,18 +119,6 @@ const PROFILES = {
             { icon: 'polygon', label: '0x9495843027c180C68c9F0bf2B42112806f86D94C' }
         ]
     },
-    lemes: {
-        name: 'lemes',
-        group: 'Sancta',
-        image: '/assets/lemes.png',
-        music: '/assets/lemes.mp3',
-        titleAnimation: ['l','le','lem','leme','lemes','leme','lem','le'],
-        buttons: [
-            { icon: 'discord', label: '@lemes.bfe' },
-            { icon: 'roblox', label: 'https://roblox.com/users/3229992738/profile' },
-            { icon: 'spotify', label: 'https://open.spotify.com/user/31gfslrtsaajnzxkycm354g5zjnm' }
-        ]
-    },
     nyx: {
         name: 'nyx',
         group: 'Sancta',
@@ -150,17 +127,6 @@ const PROFILES = {
         titleAnimation: ['n','ny','nyx','ny'],
         buttons: [
             { icon: 'discord', label: '@nychiix' }
-        ]
-    },
-    gabe: {
-        name: 'gabe',
-        group: 'Sancta',
-        image: '/assets/gabe.png',
-        music: '/assets/gabe.mp3',
-        titleAnimation: ['g','ga','gab','gabe','gab','ga'],
-        buttons: [
-            { icon: 'roblox', label: 'https://roblox.com/users/1356120340/profile' },
-            { icon: 'spotify', label: 'https://open.spotify.com/user/313qxig55qlojpmfyfq5f7ff7ws4' }
         ]
     },
     xer: {
@@ -186,6 +152,73 @@ const PROFILES = {
             { icon: 'steam', label: 'https://steamcommunity.com/id/unmortful' },
             { icon: 'discord', label: 'https://discord.com/users/308653982622941184' },
             { icon: 'pinterest', label: 'https://pinterest.com/unmortful/' }
+        ]
+    },
+    gabe: {
+        name: 'gabe',
+        group: 'Fidelis',
+        image: '/assets/gabe.png',
+        music: '/assets/gabe.mp3',
+        titleAnimation: ['g','ga','gab','gabe','gab','ga'],
+        buttons: [
+            { icon: 'roblox', label: 'https://roblox.com/users/1356120340/profile' },
+            { icon: 'spotify', label: 'https://open.spotify.com/user/313qxig55qlojpmfyfq5f7ff7ws4' }
+        ]
+    },
+    zero: {
+        name: 'zero',
+        group: 'Fidelis',
+        image: '/assets/zero.png',
+        music: '/assets/zero.mp3',
+        titleAnimation: ['z','ze','zer','zero','zer','ze'],
+        buttons: [
+            { icon: 'roblox', label: 'https://roblox.com/users/8524145/profile' },
+            { icon: 'github', label: 'https://github.com/luciferinprod' }
+        ]
+    },
+    lemes: {
+        name: 'lemes',
+        group: 'Fidelis',
+        image: '/assets/lemes.png',
+        music: '/assets/lemes.mp3',
+        titleAnimation: ['l','le','lem','leme','lemes','leme','lem','le'],
+        buttons: [
+            { icon: 'discord', label: '@lemes.bfe' },
+            { icon: 'roblox', label: 'https://roblox.com/users/3229992738/profile' },
+            { icon: 'spotify', label: 'https://open.spotify.com/user/31gfslrtsaajnzxkycm354g5zjnm' }
+        ]
+    },
+    folques: {
+        name: 'folques',
+        group: 'Fidelis',
+        image: '/assets/folques.jpg',
+        music: '/assets/folques.mp3',
+        titleAnimation: ['f','fo','fol','folq','folqu','folque','folques','folque','folqu','folq','fol','fo'],
+        buttons: [
+            { icon: 'roblox', label: 'https://roblox.com/users/4743683224/profile' },
+            { icon: 'spotify', label: 'https://open.spotify.com/user/solh3fbz555oq6bsaq5aq07ta' }
+        ]
+    },
+    lxrpz: {
+        name: 'lxrpz',
+        group: 'Fidelis',
+        image: '/assets/lxrpz.png',
+        music: '/assets/lxrpz.mp3',
+        titleAnimation: ['l','lx','lxr','lxrp','lxrpz','lxrp','lxr','lx'],
+        buttons: [
+            { icon: 'discord', label: '2lxprz' },
+            { icon: 'telegram', label: 'https://t.me/fourciuy' }
+        ]
+    },
+    hxart: {
+        name: 'hxart',
+        group: 'Fidelis',
+        image: '/assets/hxart.png',
+        music: '/assets/hxart.mp3',
+        titleAnimation: ['h','hx','hxa','hxar','hxart','hxar','hxa','hx'],
+        buttons: [
+            { icon: 'discord', label: '2lxprz' },
+            { icon: 'telegram', label: 'https://t.me/fourciuy' }
         ]
     },
     '404': {
