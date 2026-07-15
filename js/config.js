@@ -106,8 +106,14 @@ const PROFILES = {
         music: '/assets/loudandclear.mp3',
         titleAnimation: ['c','ca','cae','ca'],
         buttons: [
-            { icon: 'roblox', label: 'https://roblox.com/users/682719517/profile' },
-            { icon: 'spacehey', label: 'https://spacehey.com/seraphsghoul' }
+            { 
+                icon: '/assets/lightercae.webp', 
+                label: 'https://roblox.com/users/682719517/profile' 
+            },
+            { 
+                icon: '/assets/skullcae.png', 
+                label: 'https://spacehey.com/seraphsghoul' 
+            }
         ]
     },
     ivan: {
