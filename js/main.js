@@ -1,5 +1,5 @@
-// --- SNOW PARTICLES ---
-(function createSnow() {
+(function() {
+    // --- SNOW PARTICLES ---
     const createParticle = () => {
         const p = document.createElement('div');
         p.className = 'snowflake';
@@ -17,101 +17,95 @@
             setTimeout(createParticle, i * 100);
         }
     }, 500);
-})();
 
-// --- 3D CARD EFFECT ---
-(function setupCard3D() {
+    // --- 3D CARD EFFECT ---
     const card = document.getElementById('card');
-    if (!card) return;
-    
-    let isActive = false;
-    let currentX = 0;
-    let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
-    let rafId = null;
+    if (card) {
+        let isActive = false;
+        let currentX = 0;
+        let currentY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        let rafId = null;
 
-    function smoothUpdate() {
-        currentX += (targetX - currentX) * 0.08;
-        currentY += (targetY - currentY) * 0.08;
+        function smoothUpdate() {
+            currentX += (targetX - currentX) * 0.08;
+            currentY += (targetY - currentY) * 0.08;
 
-        if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01 && !isActive) {
-            card.classList.remove('active');
-            if (rafId) {
-                cancelAnimationFrame(rafId);
-                rafId = null;
+            if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01 && !isActive) {
+                card.classList.remove('active');
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                return;
             }
-            return;
+
+            card.style.setProperty('--rotate-x', `${currentY}deg`);
+            card.style.setProperty('--rotate-y', `${currentX}deg`);
+            card.classList.add('active');
+
+            rafId = requestAnimationFrame(smoothUpdate);
         }
 
-        card.style.setProperty('--rotate-x', `${currentY}deg`);
-        card.style.setProperty('--rotate-y', `${currentX}deg`);
-        card.classList.add('active');
+        function updateCardRotation(e) {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
 
-        rafId = requestAnimationFrame(smoothUpdate);
-    }
+            const mouseX = e.clientX / windowWidth;
+            const mouseY = e.clientY / windowHeight;
 
-    function updateCardRotation(e) {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
+            const centerX = mouseX - 0.5;
+            const centerY = mouseY - 0.5;
+            const intensity = 35;
 
-        const mouseX = e.clientX / windowWidth;
-        const mouseY = e.clientY / windowHeight;
+            targetX = -centerX * intensity;
+            targetY = centerY * intensity;
 
-        const centerX = mouseX - 0.5;
-        const centerY = mouseY - 0.5;
-        const intensity = 35;
+            isActive = true;
 
-        targetX = -centerX * intensity;
-        targetY = centerY * intensity;
-
-        isActive = true;
-
-        if (!rafId) {
-            smoothUpdate();
+            if (!rafId) {
+                smoothUpdate();
+            }
         }
+
+        function resetCardRotation() {
+            targetX = 0;
+            targetY = 0;
+            isActive = false;
+        }
+
+        document.addEventListener('mousemove', updateCardRotation);
+        document.addEventListener('mouseleave', resetCardRotation);
     }
 
-    function resetCardRotation() {
-        targetX = 0;
-        targetY = 0;
-        isActive = false;
-    }
-
-    document.addEventListener('mousemove', updateCardRotation);
-    document.addEventListener('mouseleave', resetCardRotation);
-})();
-
-// --- COPY FUNCTION ---
-(function setupCopy() {
+    // --- COPY FUNCTION ---
     const warning = document.getElementById('copy-warning');
-    if (!warning) return;
-    
-    document.querySelectorAll('[data-copy]').forEach(btn => {
-        btn.addEventListener('click', async function() {
-            const text = this.dataset.copy;
-            try {
-                await navigator.clipboard.writeText(text);
-                warning.classList.add('show');
-                setTimeout(() => warning.classList.remove('show'), 1000);
-                this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
-                setTimeout(() => this.style.boxShadow = '', 300);
-            } catch (err) {
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                textArea.remove();
-                warning.classList.add('show');
-                setTimeout(() => warning.classList.remove('show'), 1000);
-            }
+    if (warning) {
+        document.querySelectorAll('[data-copy]').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const text = this.dataset.copy;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    warning.classList.add('show');
+                    setTimeout(() => warning.classList.remove('show'), 1000);
+                    this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+                    setTimeout(() => this.style.boxShadow = '', 300);
+                } catch (err) {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    textArea.remove();
+                    warning.classList.add('show');
+                    setTimeout(() => warning.classList.remove('show'), 1000);
+                }
+            });
         });
-    });
-})();
+    }
 
-// --- FADE IN ---
-(function setupFadeIn() {
+    // --- FADE IN ---
     const fadeElements = document.querySelectorAll('.fade-in');
     fadeElements.forEach(el => {
         el.style.opacity = '0';
@@ -120,19 +114,17 @@
             el.style.transition = 'opacity 0.8s ease';
         }, 100);
     });
-})();
 
-// --- ANIMATED TITLE ---
-(function animateTitle() {
+    // --- ANIMATED TITLE ---
     const titleChars = document.title.split('');
-    if (titleChars.length === 0) return;
-    
-    let tIndex = 0;
-    setInterval(() => {
-        const maxLen = titleChars.length;
-        const currentLen = (tIndex % (maxLen + 1));
-        document.title = titleChars.slice(0, currentLen).join('') || ' ';
-        tIndex++;
-        if (tIndex > maxLen + 3) tIndex = 0;
-    }, 500);
+    if (titleChars.length > 0) {
+        let tIndex = 0;
+        setInterval(() => {
+            const maxLen = titleChars.length;
+            const currentLen = (tIndex % (maxLen + 1));
+            document.title = titleChars.slice(0, currentLen).join('') || ' ';
+            tIndex++;
+            if (tIndex > maxLen + 3) tIndex = 0;
+        }, 500);
+    }
 })();
