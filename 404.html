@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -27,12 +26,13 @@
 <body>
     <div class="loader">❆</div>
     <script>
-        const path = window.location.pathname;
-        const user = path.split('/').filter(Boolean)[0] || 'under';
-        sessionStorage.setItem('whbf_user', user);
-        
-        // SIMPLE REDIRECT - no injection, no duplicate scripts
-        window.location.href = '/profile.html?user=' + user;
+        (function() {
+            var path = window.location.pathname;
+            var user = path.split('/').filter(Boolean)[0] || 'under';
+            sessionStorage.setItem('whbf_user', user);
+            var redirectUrl = '/?user=' + user;
+            window.location.replace(redirectUrl);
+        })();
     </script>
 </body>
 </html>
