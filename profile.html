@@ -38,17 +38,14 @@
     <audio id="bg-music" src="" loop></audio>
     
     <script>
-        // --- RESTAURAR URL PARA /user/ (SEM ?user=) ---
+        // --- RESTAURAR URL PARA /user/ ---
         (function restoreURL() {
             var params = new URLSearchParams(window.location.search);
             var user = params.get('user');
             
             if (user) {
-                // Guarda o user no sessionStorage
                 sessionStorage.setItem('whbf_user', user);
-                // Cria o caminho limpo: /user/
                 var cleanPath = '/' + user + '/';
-                // Substitui a URL sem recarregar a página
                 window.history.replaceState({}, '', cleanPath);
             }
         })();
