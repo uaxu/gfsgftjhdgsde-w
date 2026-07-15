@@ -9,14 +9,12 @@
 </head>
 <body class="flex flex-col items-center justify-center px-4 min-h-screen bg-black">
 
-    <!-- ENTER SCREEN OVERLAY -->
     <div id="enter-screen" style="position: fixed; inset: 0; z-index: 9999; backdrop-filter: blur(12px); background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.5s ease;">
         <div class="text-red-600 text-3xl tracking-widest animate-pulse select-none">
             CLICK TO ENTER
         </div>
     </div>
 
-    <!-- BACK BUTTON -->
     <a href="https://whbf.cc" 
        class="fixed top-8 left-8 z-20 back-button
               w-12 h-12 bg-black/60 backdrop-blur-md border border-red-600/80 rounded-xl
@@ -24,7 +22,6 @@
         ←
     </a>
 
-    <!-- MAIN CARD -->
     <div class="max-w-2xl w-full z-10 fade-in card-glow p-8 md:p-12 bg-black/60 backdrop-blur-md border border-red-600/80 rounded-2xl opacity-0" id="card">
         <div class="flex flex-col items-center text-center mb-8">
             <img id="profile-img" src="" alt="Profile" class="profile-img w-32 h-32 rounded-full mb-4 object-cover border-2 border-red-600/50">
@@ -34,7 +31,6 @@
         <div id="buttons-container" class="flex flex-wrap justify-center gap-4"></div>
     </div>
 
-    <!-- COPY WARNING -->
     <div id="copy-warning" style="position: fixed; top: 20px; right: 20px; background: rgba(255,0,0,0.9); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 50;">
         The text was copied!
     </div>
@@ -42,15 +38,14 @@
     <audio id="bg-music" src="" loop></audio>
     
     <script src="/js/config.js"></script>
+    <script src="/js/main.js"></script>
+    
     <script>
-        // --- LOAD PROFILE DATA ---
-        (function loadProfile() {
-            let user = sessionStorage.getItem('whbf_user');
-            
-            if (!user) {
-                const params = new URLSearchParams(window.location.search);
-                user = params.get('user') || 'under';
-            }
+        // --- ALL PROFILE LOGIC IN ONE PLACE ---
+        (function() {
+            // Get user from URL params or sessionStorage
+            const params = new URLSearchParams(window.location.search);
+            let user = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
             
             const profile = PROFILES[user];
 
@@ -59,6 +54,7 @@
                 return;
             }
 
+            // Set profile data
             document.getElementById('page-title').textContent = profile.name;
             document.getElementById('profile-img').src = profile.image;
             document.getElementById('profile-img').alt = profile.name;
@@ -66,6 +62,7 @@
             document.getElementById('profile-group').textContent = `- ${profile.group} -`;
             document.getElementById('bg-music').src = profile.music;
 
+            // Generate buttons
             const container = document.getElementById('buttons-container');
             container.innerHTML = '';
 
@@ -86,47 +83,31 @@
                 div.innerHTML = `<div class="icon"><img src="${iconMap[btn.icon] || iconMap.gmail}" alt="${btn.icon}"></div>`;
                 container.appendChild(div);
             });
-        })();
-    </script>
 
-    <script>
-        // --- CLICK TO ENTER (MUST RUN AFTER DOM IS READY) ---
-        (function setupEnterScreen() {
+            // --- ENTER SCREEN LOGIC ---
             const enterScreen = document.getElementById('enter-screen');
             const music = document.getElementById('bg-music');
             
-            if (!enterScreen) return;
-            
-            // Remove any existing listeners by cloning
-            const newEnter = enterScreen.cloneNode(true);
-            enterScreen.parentNode.replaceChild(newEnter, enterScreen);
-            
-            // Add click listener to the NEW element
-            newEnter.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Play music
-                if (music) {
-                    music.volume = 0.1;
-                    music.play().catch(() => console.log('Music play failed'));
-                }
-                
-                // Fade out overlay
-                this.style.opacity = '0';
-                this.style.pointerEvents = 'none';
-                
-                // Remove after fade
-                setTimeout(() => {
-                    if (this.parentNode) {
-                        this.remove();
+            if (enterScreen) {
+                enterScreen.addEventListener('click', function() {
+                    if (music) {
+                        music.volume = 0.1;
+                        music.play().catch(() => {});
                     }
-                }, 500);
-            });
+                    this.style.opacity = '0';
+                    this.style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        if (this.parentNode) this.remove();
+                    }, 500);
+                });
+            }
+
+            // Clean up URL - remove ?user= parameter if present
+            if (params.has('user')) {
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            }
         })();
     </script>
-
-    <!-- LOAD MAIN JS -->
-    <script src="/js/main.js"></script>
 </body>
 </html>
