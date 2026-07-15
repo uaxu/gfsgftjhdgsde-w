@@ -31,8 +31,8 @@
         const user = path.split('/').filter(Boolean)[0] || 'under';
         sessionStorage.setItem('whbf_user', user);
         
-        // Redirect to profile.html with user parameter - keeps URL clean via replaceState
-        window.location.replace('/profile.html?user=' + user);
+        // SIMPLE REDIRECT - no injection, no duplicate scripts
+        window.location.href = '/profile.html?user=' + user;
     </script>
 </body>
 </html>
