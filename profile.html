@@ -53,7 +53,7 @@
 
     <script src="/js/config.js"></script>
     <script>
-        // --- MAPA DE ÍCONES (converte nome -> URL) ---
+        // --- MAPA DE ÍCONES COMPLETO ---
         var iconMap = {
             discord: 'https://cdn.simpleicons.org/discord/8a0002',
             telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
@@ -80,11 +80,10 @@
 
         // --- FUNÇÃO PARA OBTER URL DO ÍCONE ---
         function getIconUrl(icon) {
-            // Se já for uma URL (começa com http), usa diretamente
+            if (!icon) return iconMap.gmail;
             if (icon.startsWith('http://') || icon.startsWith('https://')) {
                 return icon;
             }
-            // Senão, procura no mapa
             return iconMap[icon] || iconMap.gmail;
         }
 
@@ -137,43 +136,28 @@
             var warning = document.getElementById('copy-warning');
             if (!warning) return;
 
-            var copyButtons = document.querySelectorAll('[data-copy]');
-            
-            copyButtons.forEach(function(btn) {
-                // Remover listeners antigos para evitar duplicação
-                btn.removeEventListener('click', handleCopy);
-                btn.addEventListener('click', handleCopy);
-            });
-
-            function handleCopy(e) {
-                var btn = e.currentTarget;
-                var text = btn.dataset.copy;
-                
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(function() {
-                        showCopyWarning();
-                        flashButton(btn);
-                    }).catch(function() {
+            document.querySelectorAll('[data-copy]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var text = this.dataset.copy;
+                    
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            warning.classList.add('show');
+                            setTimeout(function() {
+                                warning.classList.remove('show');
+                            }, 1000);
+                            this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+                            setTimeout(function() {
+                                this.style.boxShadow = '';
+                            }.bind(this), 300);
+                        }.bind(this)).catch(function() {
+                            fallbackCopy(text);
+                        });
+                    } else {
                         fallbackCopy(text);
-                    });
-                } else {
-                    fallbackCopy(text);
-                }
-            }
-
-            function showCopyWarning() {
-                warning.classList.add('show');
-                setTimeout(function() {
-                    warning.classList.remove('show');
-                }, 1000);
-            }
-
-            function flashButton(btn) {
-                btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
-                setTimeout(function() {
-                    btn.style.boxShadow = '';
-                }, 300);
-            }
+                    }
+                });
+            });
 
             function fallbackCopy(text) {
                 var textArea = document.createElement('textarea');
@@ -182,7 +166,10 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    showCopyWarning();
+                    warning.classList.add('show');
+                    setTimeout(function() {
+                        warning.classList.remove('show');
+                    }, 1000);
                 } catch (err) {
                     console.error('Falha ao copiar:', err);
                 }
