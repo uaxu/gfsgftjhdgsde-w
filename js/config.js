@@ -43,7 +43,7 @@ const PROFILES = {
         music: '/assets/cia.mp3',
         titleAnimation: ['c','ci','cia','ci'],
         buttons: [
-            { icon: 'discord', label: '@trackmoney' }
+            { icon: 'discord', label: '@opsectracker' }
         ]
     },
     zarro: {
