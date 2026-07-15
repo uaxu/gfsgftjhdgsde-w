@@ -37,13 +37,24 @@
 
     <audio id="bg-music" src="" loop></audio>
     
+    <script>
+        // --- RESTAURAR URL (Remove ?user= e mantém o caminho limpo) ---
+        (function restoreURL() {
+            const params = new URLSearchParams(window.location.search);
+            const user = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
+            if (params.has('user')) {
+                sessionStorage.setItem('whbf_user', user);
+                const cleanPath = '/' + user + '/';
+                window.history.replaceState({}, '', cleanPath);
+            }
+        })();
+    </script>
+
     <script src="/js/config.js"></script>
     <script>
         // --- PROFILE DATA LOADING ---
         (function loadProfile() {
-            const params = new URLSearchParams(window.location.search);
-            let user = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
-            
+            const user = sessionStorage.getItem('whbf_user') || 'under';
             const profile = PROFILES[user];
 
             if (!profile) {
@@ -78,12 +89,6 @@
                 div.innerHTML = `<div class="icon"><img src="${iconMap[btn.icon] || iconMap.gmail}" alt="${btn.icon}"></div>`;
                 container.appendChild(div);
             });
-
-            // Clean URL - remove ?user= parameter
-            if (params.has('user')) {
-                const newUrl = window.location.pathname;
-                window.history.replaceState({}, '', newUrl);
-            }
         })();
     </script>
 
