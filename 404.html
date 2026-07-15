@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -28,17 +29,31 @@
     <script>
         const path = window.location.pathname;
         const user = path.split('/').filter(Boolean)[0] || 'under';
-        
         sessionStorage.setItem('whbf_user', user);
         
+        // Fetch profile.html and inject it
         fetch('/profile.html')
             .then(response => response.text())
             .then(html => {
                 document.open();
                 document.write(html);
                 document.close();
+                window.history.replaceState({}, '', '/' + user + '/');
                 
-                window.history.replaceState({}, '', path);
+                // Re-run scripts after injection
+                const scripts = document.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    if (script.src) {
+                        newScript.src = script.src;
+                    } else {
+                        newScript.textContent = script.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                });
+            })
+            .catch(() => {
+                window.location.replace('/profile.html?user=' + user);
             });
     </script>
 </body>
