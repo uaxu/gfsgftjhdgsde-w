@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
+// --- SNOW PARTICLES ---
+(function createSnow() {
     const createParticle = () => {
         const p = document.createElement('div');
         p.className = 'snowflake';
@@ -16,7 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(createParticle, i * 100);
         }
     }, 500);
+})();
 
+// --- 3D CARD EFFECT ---
+(function setupCard3D() {
     const card = document.getElementById('card');
     if (!card) return;
     
@@ -76,47 +80,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.addEventListener('mousemove', updateCardRotation);
     document.addEventListener('mouseleave', resetCardRotation);
+})();
 
+// --- COPY FUNCTION ---
+(function setupCopy() {
     const warning = document.getElementById('copy-warning');
-    if (warning) {
-        document.querySelectorAll('[data-copy]').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const text = this.dataset.copy;
-                try {
-                    await navigator.clipboard.writeText(text);
-                    warning.classList.add('show');
-                    setTimeout(() => warning.classList.remove('show'), 1000);
-                    this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
-                    setTimeout(() => this.style.boxShadow = '', 300);
-                } catch (err) {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    textArea.remove();
-                    warning.classList.add('show');
-                    setTimeout(() => warning.classList.remove('show'), 1000);
-                }
-            });
-        });
-    }
-
-    const enterScreen = document.getElementById('enter-screen');
-    const music = document.getElementById('bg-music');
+    if (!warning) return;
     
-    if (music) {
-        music.volume = 0.1;
-        if (enterScreen) {
-            enterScreen.addEventListener('click', () => {
-                music.play().catch(() => {});
-                enterScreen.style.opacity = '0';
-                enterScreen.style.pointerEvents = 'none';
-                setTimeout(() => enterScreen.remove(), 400);
-            });
-        }
-    }
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const text = this.dataset.copy;
+            try {
+                await navigator.clipboard.writeText(text);
+                warning.classList.add('show');
+                setTimeout(() => warning.classList.remove('show'), 1000);
+                this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+                setTimeout(() => this.style.boxShadow = '', 300);
+            } catch (err) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                textArea.remove();
+                warning.classList.add('show');
+                setTimeout(() => warning.classList.remove('show'), 1000);
+            }
+        });
+    });
+})();
 
+// --- FADE IN ---
+(function setupFadeIn() {
     const fadeElements = document.querySelectorAll('.fade-in');
     fadeElements.forEach(el => {
         el.style.opacity = '0';
@@ -125,10 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
             el.style.transition = 'opacity 0.8s ease';
         }, 100);
     });
-});
+})();
 
-const titleChars = document.title.split('');
-if (titleChars.length > 0) {
+// --- ANIMATED TITLE ---
+(function animateTitle() {
+    const titleChars = document.title.split('');
+    if (titleChars.length === 0) return;
+    
     let tIndex = 0;
     setInterval(() => {
         const maxLen = titleChars.length;
@@ -137,4 +135,4 @@ if (titleChars.length > 0) {
         tIndex++;
         if (tIndex > maxLen + 3) tIndex = 0;
     }, 500);
-}
+})();
