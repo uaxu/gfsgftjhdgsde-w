@@ -159,3 +159,25 @@ body {
         font-size: 1.2rem;
     }
 }
+
+#enter-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+}
+
+#enter-screen .animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
