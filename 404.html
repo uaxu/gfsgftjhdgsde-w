@@ -27,15 +27,20 @@
 <body>
     <div class="loader">❆</div>
     <script>
-        // Get the username from the URL path
         const path = window.location.pathname;
         const user = path.split('/').filter(Boolean)[0] || 'under';
         
-        // Store the user in sessionStorage
         sessionStorage.setItem('whbf_user', user);
         
-        // Redirect to profile.html without parameters
-        window.location.replace('/profile.html');
+        fetch('/profile.html')
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+                
+                window.history.replaceState({}, '', path);
+            });
     </script>
 </body>
 </html>
