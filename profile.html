@@ -38,12 +38,9 @@
     <audio id="bg-music" src="" loop></audio>
     
     <script src="/js/config.js"></script>
-    <script src="/js/main.js"></script>
-    
     <script>
-        // --- ALL PROFILE LOGIC IN ONE PLACE ---
-        (function() {
-            // Get user from URL params or sessionStorage
+        // --- PROFILE DATA LOADING ---
+        (function loadProfile() {
             const params = new URLSearchParams(window.location.search);
             let user = params.get('user') || sessionStorage.getItem('whbf_user') || 'under';
             
@@ -54,7 +51,6 @@
                 return;
             }
 
-            // Set profile data
             document.getElementById('page-title').textContent = profile.name;
             document.getElementById('profile-img').src = profile.image;
             document.getElementById('profile-img').alt = profile.name;
@@ -62,7 +58,6 @@
             document.getElementById('profile-group').textContent = `- ${profile.group} -`;
             document.getElementById('bg-music').src = profile.music;
 
-            // Generate buttons
             const container = document.getElementById('buttons-container');
             container.innerHTML = '';
 
@@ -84,30 +79,36 @@
                 container.appendChild(div);
             });
 
-            // --- ENTER SCREEN LOGIC ---
-            const enterScreen = document.getElementById('enter-screen');
-            const music = document.getElementById('bg-music');
-            
-            if (enterScreen) {
-                enterScreen.addEventListener('click', function() {
-                    if (music) {
-                        music.volume = 0.1;
-                        music.play().catch(() => {});
-                    }
-                    this.style.opacity = '0';
-                    this.style.pointerEvents = 'none';
-                    setTimeout(() => {
-                        if (this.parentNode) this.remove();
-                    }, 500);
-                });
-            }
-
-            // Clean up URL - remove ?user= parameter if present
+            // Clean URL - remove ?user= parameter
             if (params.has('user')) {
                 const newUrl = window.location.pathname;
                 window.history.replaceState({}, '', newUrl);
             }
         })();
     </script>
+
+    <script>
+        // --- ENTER SCREEN LOGIC ---
+        (function setupEnterScreen() {
+            const enterScreen = document.getElementById('enter-screen');
+            const music = document.getElementById('bg-music');
+            
+            if (!enterScreen) return;
+            
+            enterScreen.addEventListener('click', function() {
+                if (music) {
+                    music.volume = 0.1;
+                    music.play().catch(() => {});
+                }
+                this.style.opacity = '0';
+                this.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    if (this.parentNode) this.remove();
+                }, 500);
+            });
+        })();
+    </script>
+
+    <script src="/js/main.js"></script>
 </body>
 </html>
