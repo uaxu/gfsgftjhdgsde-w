@@ -31,6 +31,7 @@
         <div id="buttons-container" class="flex flex-wrap justify-center gap-4"></div>
     </div>
 
+    <!-- WARNING DE COPY -->
     <div id="copy-warning" style="position: fixed; top: 20px; right: 20px; background: rgba(255,0,0,0.9); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 50;">
         The text was copied!
     </div>
@@ -53,7 +54,7 @@
 
     <script src="/js/config.js"></script>
     <script>
-        // --- MAPA DE ÍCONES COMPLETO ---
+        // --- MAPA DE ÍCONES ---
         var iconMap = {
             discord: 'https://cdn.simpleicons.org/discord/8a0002',
             telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
@@ -81,10 +82,58 @@
         // --- FUNÇÃO PARA OBTER URL DO ÍCONE ---
         function getIconUrl(icon) {
             if (!icon) return iconMap.gmail;
-            if (icon.startsWith('http://') || icon.startsWith('https://')) {
+            if (icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('/assets/')) {
                 return icon;
             }
             return iconMap[icon] || iconMap.gmail;
+        }
+
+        // --- FUNÇÃO PARA MOSTRAR O WARNING ---
+        function showCopyWarning() {
+            var warning = document.getElementById('copy-warning');
+            if (!warning) return;
+            warning.classList.add('show');
+            setTimeout(function() {
+                warning.classList.remove('show');
+            }, 1200);
+        }
+
+        // --- FUNÇÃO PARA COPIAR TEXTO ---
+        function copyText(text, btn) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showCopyWarning();
+                    flashButton(btn);
+                }).catch(function() {
+                    fallbackCopy(text, btn);
+                });
+            } else {
+                fallbackCopy(text, btn);
+            }
+        }
+
+        // --- FALLBACK COPY ---
+        function fallbackCopy(text, btn) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopyWarning();
+                flashButton(btn);
+            } catch (err) {
+                console.error('Falha ao copiar:', err);
+            }
+            textArea.remove();
+        }
+
+        // --- FLASH NO BOTÃO ---
+        function flashButton(btn) {
+            btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+            setTimeout(function() {
+                btn.style.boxShadow = '';
+            }, 300);
         }
 
         // --- PROFILE DATA LOADING ---
@@ -110,72 +159,30 @@
             profile.buttons.forEach(function(btn) {
                 var iconUrl = getIconUrl(btn.icon);
                 var isLink = btn.label.startsWith('http://') || btn.label.startsWith('https://');
+                var element;
                 
                 if (isLink) {
-                    var a = document.createElement('a');
-                    a.href = btn.label;
-                    a.target = '_blank';
-                    a.className = 'btn';
-                    a.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
-                    container.appendChild(a);
+                    element = document.createElement('a');
+                    element.href = btn.label;
+                    element.target = '_blank';
+                    element.className = 'btn';
                 } else {
-                    var div = document.createElement('div');
-                    div.className = 'btn';
-                    div.dataset.copy = btn.label;
-                    div.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
-                    container.appendChild(div);
+                    element = document.createElement('div');
+                    element.className = 'btn';
+                    element.dataset.copy = btn.label;
+                    // ADICIONAR O EVENTO DE CLIQUE DIRETAMENTE AQUI
+                    element.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        var text = this.dataset.copy;
+                        copyText(text, this);
+                    });
                 }
+                
+                element.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
+                container.appendChild(element);
             });
-
-            // --- ADICIONAR EVENT LISTENERS DE COPY ---
-            setupCopyListeners();
         })();
-
-        // --- FUNÇÃO PARA CONFIGURAR COPY ---
-        function setupCopyListeners() {
-            var warning = document.getElementById('copy-warning');
-            if (!warning) return;
-
-            document.querySelectorAll('[data-copy]').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var text = this.dataset.copy;
-                    
-                    if (navigator.clipboard) {
-                        navigator.clipboard.writeText(text).then(function() {
-                            warning.classList.add('show');
-                            setTimeout(function() {
-                                warning.classList.remove('show');
-                            }, 1000);
-                            this.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
-                            setTimeout(function() {
-                                this.style.boxShadow = '';
-                            }.bind(this), 300);
-                        }.bind(this)).catch(function() {
-                            fallbackCopy(text);
-                        });
-                    } else {
-                        fallbackCopy(text);
-                    }
-                });
-            });
-
-            function fallbackCopy(text) {
-                var textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    warning.classList.add('show');
-                    setTimeout(function() {
-                        warning.classList.remove('show');
-                    }, 1000);
-                } catch (err) {
-                    console.error('Falha ao copiar:', err);
-                }
-                textArea.remove();
-            }
-        }
     </script>
 
     <script>
