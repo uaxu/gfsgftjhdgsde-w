@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
     const createParticle = () => {
         const p = document.createElement('div');
         p.className = 'snowflake';
@@ -77,12 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.addEventListener('mousemove', updateCardRotation);
     document.addEventListener('mouseleave', resetCardRotation);
-    document.addEventListener('mouseenter', () => {
-        isActive = true;
-        if (!rafId) {
-            smoothUpdate();
-        }
-    });
 
     const warning = document.getElementById('copy-warning');
     if (warning) {
@@ -124,18 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const titleChars = document.title.split('');
-    if (titleChars.length > 0) {
-        let tIndex = 0;
-        setInterval(() => {
-            const maxLen = titleChars.length;
-            const currentLen = (tIndex % (maxLen + 1));
-            document.title = titleChars.slice(0, currentLen).join('') || ' ';
-            tIndex++;
-            if (tIndex > maxLen + 3) tIndex = 0;
-        }, 500);
-    }
-
     const fadeElements = document.querySelectorAll('.fade-in');
     fadeElements.forEach(el => {
         el.style.opacity = '0';
@@ -145,3 +126,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     });
 });
+
+const titleChars = document.title.split('');
+if (titleChars.length > 0) {
+    let tIndex = 0;
+    setInterval(() => {
+        const maxLen = titleChars.length;
+        const currentLen = (tIndex % (maxLen + 1));
+        document.title = titleChars.slice(0, currentLen).join('') || ' ';
+        tIndex++;
+        if (tIndex > maxLen + 3) tIndex = 0;
+    }, 500);
+}
