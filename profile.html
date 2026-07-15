@@ -53,7 +53,7 @@
 
     <script src="/js/config.js"></script>
     <script>
-        // --- PROFILE DATA LOADING (SEM ICONMAP) ---
+        // --- PROFILE DATA LOADING ---
         (function loadProfile() {
             var user = sessionStorage.getItem('whbf_user') || 'under';
             var profile = PROFILES[user];
@@ -92,7 +92,66 @@
                     container.appendChild(div);
                 }
             });
+
+            // --- ADICIONAR EVENT LISTENERS DE COPY DEPOIS DOS BOTÕES SEREM CRIADOS ---
+            setupCopyListeners();
         })();
+
+        // --- FUNÇÃO PARA CONFIGURAR COPY ---
+        function setupCopyListeners() {
+            var warning = document.getElementById('copy-warning');
+            if (!warning) return;
+
+            document.querySelectorAll('[data-copy]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var text = this.dataset.copy;
+                    
+                    // Tentar copiar usando a API moderna
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            showCopyWarning(warning);
+                            flashButton(this);
+                        }.bind(this)).catch(function() {
+                            fallbackCopy(text, warning, this);
+                        }.bind(this));
+                    } else {
+                        fallbackCopy(text, warning, this);
+                    }
+                });
+            });
+        }
+
+        // --- MOSTRAR WARNING ---
+        function showCopyWarning(warning) {
+            warning.classList.add('show');
+            setTimeout(function() {
+                warning.classList.remove('show');
+            }, 1000);
+        }
+
+        // --- FLASH NO BOTÃO ---
+        function flashButton(btn) {
+            btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+            setTimeout(function() {
+                btn.style.boxShadow = '';
+            }, 300);
+        }
+
+        // --- MÉTODO FALLBACK PARA COPY ---
+        function fallbackCopy(text, warning, btn) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopyWarning(warning);
+                flashButton(btn);
+            } catch (err) {
+                console.error('Falha ao copiar:', err);
+            }
+            textArea.remove();
+        }
     </script>
 
     <script>
