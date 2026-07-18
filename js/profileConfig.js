@@ -164,8 +164,11 @@ function flashButton(btn) {
     });
 })();
 
-fetch('whbfascii.txt')
+fetch('/whbfascii.txt')
   .then(res => res.text())
   .then(art => {
     console.log(`%c${art}`, "color:#000; font-family:monospace; font-size:14px;");
+  })
+  .catch(() => {
+
   });
