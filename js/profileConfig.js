@@ -126,12 +126,6 @@ function startTitleAnimation() {
         window.location.href = 'https://whbf.cc';
         return;
     }
-
-    // VERIFICAR SE OS ELEMENTOS EXISTEM ANTES DE MODIFICAR
-    var titleEl = document.getElementById('page-title');
-    if (titleEl) {
-        titleEl.textContent = profile.name;
-    }
     
     document.title = profile.name;
     
