@@ -67,11 +67,19 @@
     to { transform: translateY(250vh); }
   }
 
+  @font-face {
+    font-family: 'JMH Typewriter';
+    src: url('/assets/JMHTypewriter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
   #terminal-big {
     white-space: pre;
     color: #8a0002;
     text-align: center;
     font-size: 5rem;
+    font-family: 'JMH Typewriter', monospace;
     line-height: 4rem;
     min-height: 8rem;
   }
