@@ -1,4 +1,3 @@
-//  MAPA DE ÍCONES 
 var iconMap = {
     discord: 'https://cdn.simpleicons.org/discord/8a0002',
     telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
@@ -23,7 +22,6 @@ var iconMap = {
     spacehey: 'https://cdn.simpleicons.org/gmail/8a0002'
 };
 
-//  FUNÇÃO PARA OBTER URL DO ÍCONE 
 function getIconUrl(icon) {
     if (!icon) return iconMap.gmail;
     if (icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('/assets/')) {
@@ -32,7 +30,6 @@ function getIconUrl(icon) {
     return iconMap[icon] || iconMap.gmail;
 }
 
-//  FUNÇÃO PARA COPIAR TEXTO 
 function copyText(text, btn) {
     var textArea = document.createElement('textarea');
     textArea.value = text;
@@ -70,7 +67,6 @@ function copyText(text, btn) {
     textArea.remove();
 }
 
-//  FUNÇÃO PARA MOSTRAR O WARNING 
 function showCopyWarning() {
     var warning = document.getElementById('copy-warning');
     if (!warning) return;
@@ -80,7 +76,6 @@ function showCopyWarning() {
     }, 1200);
 }
 
-//  FLASH NO BOTÃO 
 function flashButton(btn) {
     if (!btn) return;
     btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
@@ -89,7 +84,6 @@ function flashButton(btn) {
     }, 300);
 }
 
-//  PROFILE DATA LOADING 
 (function loadProfile() {
     var user = sessionStorage.getItem('whbf_user') || 'under';
     var profile = PROFILES[user];
@@ -135,7 +129,6 @@ function flashButton(btn) {
     });
 })();
 
-//  RESTAURAR URL PARA /user/
 (function restoreURL() {
     var params = new URLSearchParams(window.location.search);
     var user = params.get('user');
@@ -146,7 +139,6 @@ function flashButton(btn) {
     }
 })();
 
-//  ENTER SCREEN LOGIC
 (function setupEnterScreen() {
     var enterScreen = document.getElementById('enter-screen');
     var music = document.getElementById('bg-music');
@@ -164,11 +156,9 @@ function flashButton(btn) {
     });
 })();
 
-fetch('/whbfascii.txt')
-  .then(res => res.text())
-  .then(art => {
-    console.log(`%c${art}`, "color:#000; font-family:monospace; font-size:14px;");
-  })
-  .catch(() => {
-
-  });
+function loadAsciiArt() {
+    fetch('/whbfascii.txt')
+        .then(res => res.text())
+        .then(art => console.log('%c' + art, 'color:#8a0002; font-family:monospace; font-size:14px;'))
+        .catch(() => {});
+}
