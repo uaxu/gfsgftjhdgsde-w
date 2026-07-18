@@ -115,52 +115,6 @@ body {
 }
 
 #enter-screen {
-    backdrop-filter: blur(12px);
-    background: rgba(0, 0, 0, 0.7);
-    transition: opacity 0.4s ease;
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.icon {
-    width: 40px;
-    height: 40px;
-}
-
-.icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.card-glow > * {
-    transform-style: preserve-3d;
-}
-
-@media (max-width: 640px) {
-    .btn {
-        width: 50px;
-        height: 50px;
-    }
-    .icon {
-        width: 30px;
-        height: 30px;
-    }
-    .back-button {
-        top: 16px;
-        left: 16px;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-}
-
-#enter-screen {
     position: fixed;
     inset: 0;
     z-index: 9999;
@@ -180,4 +134,62 @@ body {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card-glow > * {
+    transform-style: preserve-3d;
+}
+
+/* FORÇAR CORES (caso o Tailwind esteja a sobrescrever) */
+.bg-black {
+    background-color: #000 !important;
+}
+
+.bg-black\/60 {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.border-red-600\/80 {
+    border-color: rgba(220, 38, 38, 0.8) !important;
+}
+
+.text-red-500 {
+    color: #ef4444 !important;
+}
+
+.text-red-600 {
+    color: #dc2626 !important;
+}
+
+.text-gray-400 {
+    color: #9ca3af !important;
+}
+
+@media (max-width: 640px) {
+    .btn {
+        width: 50px;
+        height: 50px;
+    }
+    .icon {
+        width: 30px;
+        height: 30px;
+    }
+    .back-button {
+        top: 16px;
+        left: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
 }
