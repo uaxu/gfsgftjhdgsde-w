@@ -271,14 +271,18 @@ loadAsciiArt();
 // ANIMATED TITLE (USANDO O TITLE DO PERFIL)
 
 (function animateTitle() {
-    var titleChars = document.title.split('');
-    if (titleChars.length === 0) return;
-    var tIndex = 0;
+    var user = sessionStorage.getItem('whbf_user') || 'aaa';
+    var profile = PROFILES[user];
+    
+    if (!profile || !profile.titleAnimation) {
+        return;
+    }
+    
+    var frames = profile.titleAnimation;
+    var index = 0;
+    
     setInterval(function() {
-        var maxLen = titleChars.length;
-        var currentLen = (tIndex % (maxLen + 1));
-        document.title = titleChars.slice(0, currentLen).join('') || ' ';
-        tIndex++;
-        if (tIndex > maxLen + 3) tIndex = 0;
-    }, 500);
+        document.title = frames[index] || 'WHBF';
+        index = (index + 1) % frames.length;
+    }, 400);
 })();
