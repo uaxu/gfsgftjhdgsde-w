@@ -104,10 +104,7 @@ function startTitleAnimation() {
     if (!profile || !profile.titleAnimation) {
         return;
     }
-    
-    var frames = profile.titleAnimation;
-    var index = 0;
-    
+
     if (window.titleInterval) {
         clearInterval(window.titleInterval);
     }
