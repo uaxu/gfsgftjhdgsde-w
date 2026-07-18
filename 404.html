@@ -30,7 +30,6 @@
         (function() {
             var path = window.location.pathname;
             var user = path.split('/').filter(Boolean)[0] || 'under';
-            
             sessionStorage.setItem('whbf_user', user);
             window.location.replace('/profile.html?user=' + user);
         })();
