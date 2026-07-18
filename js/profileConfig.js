@@ -108,7 +108,6 @@ function startTitleAnimation() {
     var frames = profile.titleAnimation;
     var index = 0;
     
-    // Para limpar qualquer intervalo anterior
     if (window.titleInterval) {
         clearInterval(window.titleInterval);
     }
@@ -131,16 +130,38 @@ function startTitleAnimation() {
         return;
     }
 
-    document.getElementById('page-title').textContent = profile.name;
+    // VERIFICAR SE OS ELEMENTOS EXISTEM ANTES DE MODIFICAR
+    var titleEl = document.getElementById('page-title');
+    if (titleEl) {
+        titleEl.textContent = profile.name;
+    }
+    
     document.title = profile.name;
     
-    document.getElementById('profile-img').src = profile.image;
-    document.getElementById('profile-img').alt = profile.name;
-    document.getElementById('profile-name').textContent = profile.name;
-    document.getElementById('profile-group').textContent = '- ' + profile.group + ' -';
-    document.getElementById('bg-music').src = profile.music;
+    var imgEl = document.getElementById('profile-img');
+    if (imgEl) {
+        imgEl.src = profile.image;
+        imgEl.alt = profile.name;
+    }
+    
+    var nameEl = document.getElementById('profile-name');
+    if (nameEl) {
+        nameEl.textContent = profile.name;
+    }
+    
+    var groupEl = document.getElementById('profile-group');
+    if (groupEl) {
+        groupEl.textContent = '- ' + profile.group + ' -';
+    }
+    
+    var musicEl = document.getElementById('bg-music');
+    if (musicEl) {
+        musicEl.src = profile.music;
+    }
 
     var container = document.getElementById('buttons-container');
+    if (!container) return;
+    
     container.innerHTML = '';
 
     profile.buttons.forEach(function(btn) {
@@ -167,9 +188,6 @@ function startTitleAnimation() {
         container.appendChild(element);
     });
 
-    // ============================================
-    // INICIAR A ANIMAÇÃO DO TÍTULO DEPOIS DO PERFIL CARREGAR
-    // ============================================
     startTitleAnimation();
 })();
 
@@ -213,7 +231,6 @@ loadAsciiArt();
 // 3D CARD EFFECT + SNOW + FADE IN
 // ============================================
 (function() {
-    // --- SNOW PARTICLES ---
     var createParticle = function() {
         var p = document.createElement('div');
         p.className = 'snowflake';
@@ -232,7 +249,6 @@ loadAsciiArt();
         }
     }, 500);
 
-    // --- 3D CARD EFFECT ---
     var card = document.getElementById('card');
     if (card) {
         var isActive = false;
@@ -288,7 +304,6 @@ loadAsciiArt();
         document.addEventListener('mouseleave', resetCardRotation);
     }
 
-    // --- FADE IN ---
     var fadeElements = document.querySelectorAll('.fade-in');
     fadeElements.forEach(function(el) {
         el.style.opacity = '0';
