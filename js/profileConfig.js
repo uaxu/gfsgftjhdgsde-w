@@ -1,3 +1,6 @@
+
+// MAPA DE ÍCONES
+
 var iconMap = {
     discord: 'https://cdn.simpleicons.org/discord/8a0002',
     telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
@@ -22,6 +25,9 @@ var iconMap = {
     spacehey: 'https://cdn.simpleicons.org/gmail/8a0002'
 };
 
+
+// FUNÇÃO PARA OBTER URL DO ÍCONE
+
 function getIconUrl(icon) {
     if (!icon) return iconMap.gmail;
     if (icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('/assets/')) {
@@ -29,6 +35,9 @@ function getIconUrl(icon) {
     }
     return iconMap[icon] || iconMap.gmail;
 }
+
+
+// FUNÇÕES DE COPY
 
 function copyText(text, btn) {
     var textArea = document.createElement('textarea');
@@ -48,21 +57,9 @@ function copyText(text, btn) {
         if (successful) {
             showCopyWarning();
             flashButton(btn);
-        } else {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(function() {
-                    showCopyWarning();
-                    flashButton(btn);
-                }).catch(function() {
-                    alert('Falha ao copiar: ' + text);
-                });
-            } else {
-                alert('Falha ao copiar: ' + text);
-            }
         }
     } catch (err) {
         console.error('Erro ao copiar:', err);
-        alert('Falha ao copiar: ' + text);
     }
     textArea.remove();
 }
@@ -83,6 +80,22 @@ function flashButton(btn) {
         btn.style.boxShadow = '';
     }, 300);
 }
+
+
+// RESTAURAR URL (remove ?user=)
+
+(function restoreURL() {
+    var params = new URLSearchParams(window.location.search);
+    var user = params.get('user');
+    if (user) {
+        sessionStorage.setItem('whbf_user', user);
+        var cleanPath = '/' + user + '/';
+        window.history.replaceState({}, '', cleanPath);
+    }
+})();
+
+
+// CARREGAR PERFIL
 
 (function loadProfile() {
     var user = sessionStorage.getItem('whbf_user') || 'under';
@@ -120,8 +133,7 @@ function flashButton(btn) {
             element.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var text = this.dataset.copy;
-                copyText(text, this);
+                copyText(this.dataset.copy, this);
             };
         }
         element.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
@@ -129,15 +141,8 @@ function flashButton(btn) {
     });
 })();
 
-(function restoreURL() {
-    var params = new URLSearchParams(window.location.search);
-    var user = params.get('user');
-    if (user) {
-        sessionStorage.setItem('whbf_user', user);
-        var cleanPath = '/' + user + '/';
-        window.history.replaceState({}, '', cleanPath);
-    }
-})();
+
+// ENTER SCREEN
 
 (function setupEnterScreen() {
     var enterScreen = document.getElementById('enter-screen');
@@ -156,9 +161,124 @@ function flashButton(btn) {
     });
 })();
 
+
+// ASCII ART
+
 function loadAsciiArt() {
     fetch('/whbfascii.txt')
-        .then(res => res.text())
-        .then(art => console.log('%c' + art, 'color:#8a0002; font-family:monospace; font-size:14px;'))
-        .catch(() => {});
+        .then(function(res) {
+            if (!res.ok) throw new Error('Ficheiro não encontrado');
+            return res.text();
+        })
+        .then(function(art) {
+            console.log('%c' + art, 'color:#8a0002; font-family:monospace; font-size:14px;');
+        })
+        .catch(function() {});
 }
+loadAsciiArt();
+
+
+// 3D CARD EFFECT + SNOW + FADE IN
+
+(function() {
+    // --- SNOW PARTICLES ---
+    var createParticle = function() {
+        var p = document.createElement('div');
+        p.className = 'snowflake';
+        p.style.left = Math.random() * window.innerWidth + 'px';
+        p.style.fontSize = Math.random() * 14 + 6 + 'px';
+        p.style.animationDuration = Math.random() * 6 + 6 + 's';
+        p.innerText = '❆';
+        document.body.appendChild(p);
+        setTimeout(function() { p.remove(); }, 12000);
+    };
+    
+    setTimeout(function() {
+        setInterval(createParticle, 300);
+        for (var i = 0; i < 10; i++) {
+            setTimeout(createParticle, i * 100);
+        }
+    }, 500);
+
+    // --- 3D CARD EFFECT ---
+    var card = document.getElementById('card');
+    if (card) {
+        var isActive = false;
+        var currentX = 0;
+        var currentY = 0;
+        var targetX = 0;
+        var targetY = 0;
+        var rafId = null;
+
+        function smoothUpdate() {
+            currentX += (targetX - currentX) * 0.08;
+            currentY += (targetY - currentY) * 0.08;
+
+            if (Math.abs(currentX) < 0.01 && Math.abs(currentY) < 0.01 && !isActive) {
+                card.classList.remove('active');
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                return;
+            }
+
+            card.style.setProperty('--rotate-x', currentY + 'deg');
+            card.style.setProperty('--rotate-y', currentX + 'deg');
+            card.classList.add('active');
+
+            rafId = requestAnimationFrame(smoothUpdate);
+        }
+
+        function updateCardRotation(e) {
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+            var mouseX = e.clientX / windowWidth;
+            var mouseY = e.clientY / windowHeight;
+            var centerX = mouseX - 0.5;
+            var centerY = mouseY - 0.5;
+            var intensity = 35;
+            targetX = -centerX * intensity;
+            targetY = centerY * intensity;
+            isActive = true;
+            if (!rafId) {
+                smoothUpdate();
+            }
+        }
+
+        function resetCardRotation() {
+            targetX = 0;
+            targetY = 0;
+            isActive = false;
+        }
+
+        document.addEventListener('mousemove', updateCardRotation);
+        document.addEventListener('mouseleave', resetCardRotation);
+    }
+
+    // --- FADE IN ---
+    var fadeElements = document.querySelectorAll('.fade-in');
+    fadeElements.forEach(function(el) {
+        el.style.opacity = '0';
+        setTimeout(function() {
+            el.style.opacity = '1';
+            el.style.transition = 'opacity 0.8s ease';
+        }, 100);
+    });
+})();
+
+
+// ANIMATED TITLE (USANDO O TITLE DO PERFIL)
+
+(function animateTitle() {
+    var titleChars = document.title.split('');
+    if (titleChars.length === 0) return;
+    var tIndex = 0;
+    setInterval(function() {
+        var maxLen = titleChars.length;
+        var currentLen = (tIndex % (maxLen + 1));
+        document.title = titleChars.slice(0, currentLen).join('') || ' ';
+        tIndex++;
+        if (tIndex > maxLen + 3) tIndex = 0;
+    }, 500);
+})();
