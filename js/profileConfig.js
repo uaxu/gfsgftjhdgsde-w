@@ -113,7 +113,7 @@ function startTitleAnimation() {
     }
     
     window.titleInterval = setInterval(function() {
-        document.title = frames[index] || 'WHBF';
+        document.title = frames[index] || profile.name || 'WHBF';
         index = (index + 1) % frames.length;
     }, 400);
 }
@@ -182,7 +182,9 @@ function startTitleAnimation() {
         container.appendChild(element);
     });
 
-    startTitleAnimation();
+    setTimeout(function() {
+        startTitleAnimation();
+    }, 100);
 })();
 
 // ============================================
