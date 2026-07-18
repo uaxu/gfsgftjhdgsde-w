@@ -226,7 +226,7 @@ const PROFILES = {
         titleAnimation: ['4','40','404','40'],
         buttons: [
             { icon: 'tiktok', label: 'https://tiktok.com/@12950.ngg' },
-            { icon: 'discord', label: 'https://discord.com/users/1066503806600368228' },
+            { icon: 'discord', label: 'https://discord.com/users/1510649291075621006' },
             { icon: 'spotify', label: 'https://open.spotify.com/user/31zkf7xjvnrebepx3sdj6lcm3aoi' }
         ]
     }
