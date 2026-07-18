@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -25,18 +26,13 @@
 </head>
 <body>
     <div class="loader">❆</div>
-    <script src="/js/config.js"></script>
     <script>
         (function() {
             var path = window.location.pathname;
-            var user = path.split('/').filter(Boolean)[0] || '';
+            var user = path.split('/').filter(Boolean)[0] || 'under';
             
-            if (user && PROFILES[user]) {
-                sessionStorage.setItem('whbf_user', user);
-                window.location.replace('/profile.html?user=' + user);
-            } else {
-                window.location.replace('/');
-            }
+            sessionStorage.setItem('whbf_user', user);
+            window.location.replace('/profile.html?user=' + user);
         })();
     </script>
 </body>
