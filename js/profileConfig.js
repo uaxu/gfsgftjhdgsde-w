@@ -1,6 +1,6 @@
-
+// ============================================
 // MAPA DE ÍCONES
-
+// ============================================
 var iconMap = {
     discord: 'https://cdn.simpleicons.org/discord/8a0002',
     telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
@@ -25,9 +25,9 @@ var iconMap = {
     spacehey: 'https://cdn.simpleicons.org/gmail/8a0002'
 };
 
-
+// ============================================
 // FUNÇÃO PARA OBTER URL DO ÍCONE
-
+// ============================================
 function getIconUrl(icon) {
     if (!icon) return iconMap.gmail;
     if (icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('/assets/')) {
@@ -36,9 +36,9 @@ function getIconUrl(icon) {
     return iconMap[icon] || iconMap.gmail;
 }
 
-
+// ============================================
 // FUNÇÕES DE COPY
-
+// ============================================
 function copyText(text, btn) {
     var textArea = document.createElement('textarea');
     textArea.value = text;
@@ -81,9 +81,9 @@ function flashButton(btn) {
     }, 300);
 }
 
-
+// ============================================
 // RESTAURAR URL (remove ?user=)
-
+// ============================================
 (function restoreURL() {
     var params = new URLSearchParams(window.location.search);
     var user = params.get('user');
@@ -94,11 +94,36 @@ function flashButton(btn) {
     }
 })();
 
+// ============================================
+// FUNÇÃO PARA ANIMAR O TÍTULO
+// ============================================
+function startTitleAnimation() {
+    var user = sessionStorage.getItem('whbf_user') || 'aaa';
+    var profile = PROFILES[user];
+    
+    if (!profile || !profile.titleAnimation) {
+        return;
+    }
+    
+    var frames = profile.titleAnimation;
+    var index = 0;
+    
+    // Para limpar qualquer intervalo anterior
+    if (window.titleInterval) {
+        clearInterval(window.titleInterval);
+    }
+    
+    window.titleInterval = setInterval(function() {
+        document.title = frames[index] || 'WHBF';
+        index = (index + 1) % frames.length;
+    }, 400);
+}
 
+// ============================================
 // CARREGAR PERFIL
-
+// ============================================
 (function loadProfile() {
-    var user = sessionStorage.getItem('whbf_user') || 'under';
+    var user = sessionStorage.getItem('whbf_user') || 'aaa';
     var profile = PROFILES[user];
 
     if (!profile) {
@@ -107,6 +132,8 @@ function flashButton(btn) {
     }
 
     document.getElementById('page-title').textContent = profile.name;
+    document.title = profile.name;
+    
     document.getElementById('profile-img').src = profile.image;
     document.getElementById('profile-img').alt = profile.name;
     document.getElementById('profile-name').textContent = profile.name;
@@ -139,11 +166,16 @@ function flashButton(btn) {
         element.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
         container.appendChild(element);
     });
+
+    // ============================================
+    // INICIAR A ANIMAÇÃO DO TÍTULO DEPOIS DO PERFIL CARREGAR
+    // ============================================
+    startTitleAnimation();
 })();
 
-
+// ============================================
 // ENTER SCREEN
-
+// ============================================
 (function setupEnterScreen() {
     var enterScreen = document.getElementById('enter-screen');
     var music = document.getElementById('bg-music');
@@ -161,9 +193,9 @@ function flashButton(btn) {
     });
 })();
 
-
+// ============================================
 // ASCII ART
-
+// ============================================
 function loadAsciiArt() {
     fetch('/whbfascii.txt')
         .then(function(res) {
@@ -177,9 +209,9 @@ function loadAsciiArt() {
 }
 loadAsciiArt();
 
-
+// ============================================
 // 3D CARD EFFECT + SNOW + FADE IN
-
+// ============================================
 (function() {
     // --- SNOW PARTICLES ---
     var createParticle = function() {
@@ -265,24 +297,4 @@ loadAsciiArt();
             el.style.transition = 'opacity 0.8s ease';
         }, 100);
     });
-})();
-
-
-// ANIMATED TITLE (USANDO O TITLE DO PERFIL)
-
-(function animateTitle() {
-    var user = sessionStorage.getItem('whbf_user') || 'aaa';
-    var profile = PROFILES[user];
-    
-    if (!profile || !profile.titleAnimation) {
-        return;
-    }
-    
-    var frames = profile.titleAnimation;
-    var index = 0;
-    
-    setInterval(function() {
-        document.title = frames[index] || 'WHBF';
-        index = (index + 1) % frames.length;
-    }, 400);
 })();
