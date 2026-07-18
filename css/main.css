@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #000;
+    background: #000 !important;
     height: 100vh;
     overflow: hidden;
     font-family: monospace;
@@ -14,7 +14,7 @@ body {
 }
 
 .card-glow {
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.25);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.25) !important;
     transform-style: preserve-3d;
     transition: transform 0.08s ease-out;
     will-change: transform;
@@ -151,13 +151,34 @@ body {
     transform-style: preserve-3d;
 }
 
-/* FORÇAR CORES (caso o Tailwind esteja a sobrescrever) */
+@media (max-width: 640px) {
+    .btn {
+        width: 50px;
+        height: 50px;
+    }
+    .icon {
+        width: 30px;
+        height: 30px;
+    }
+    .back-button {
+        top: 16px;
+        left: 16px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+
 .bg-black {
     background-color: #000 !important;
 }
 
 .bg-black\/60 {
     background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.bg-black\/70 {
+    background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 .border-red-600\/80 {
@@ -176,20 +197,19 @@ body {
     color: #9ca3af !important;
 }
 
-@media (max-width: 640px) {
-    .btn {
-        width: 50px;
-        height: 50px;
-    }
-    .icon {
-        width: 30px;
-        height: 30px;
-    }
-    .back-button {
-        top: 16px;
-        left: 16px;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
+.text-gray-500 {
+    color: #6b7280 !important;
+}
+
+.max-w-2xl {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    border-color: rgba(220, 38, 38, 0.8) !important;
+}
+
+div, section, main, header, footer, a, article {
+    background-color: transparent;
+}
+
+html, body {
+    background-color: #000 !important;
 }
