@@ -5,25 +5,30 @@
 }
 
 body {
-    background: #000 !important;
+    background: #0a0a0a !important;
     height: 100vh;
     overflow: hidden;
     font-family: monospace;
-    color: white;
+    color: #e0e0e0;
     cursor: default;
 }
 
+html, body {
+    background-color: #0a0a0a !important;
+}
+
 .card-glow {
-    background-color: rgba(0, 0, 0, 0.85) !important;
+    background-color: rgba(20, 20, 20, 0.92) !important;
     backdrop-filter: blur(8px);
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.25) !important;
+    box-shadow: 0 0 20px rgba(100, 100, 100, 0.15) !important;
     transform-style: preserve-3d;
     transition: transform 0.08s ease-out;
     will-change: transform;
+    border: 1px solid rgba(80, 80, 80, 0.3);
 }
 
 #card, .max-w-2xl {
-    background-color: rgba(0, 0, 0, 0.85) !important;
+    background-color: rgba(20, 20, 20, 0.92) !important;
 }
 
 .card-glow.active {
@@ -33,7 +38,7 @@ body {
 .snowflake {
     position: absolute;
     top: -10px;
-    color: rgba(255, 0, 0, 0.5);
+    color: rgba(150, 150, 150, 0.3);
     user-select: none;
     pointer-events: none;
     animation: fall linear infinite;
@@ -45,14 +50,14 @@ body {
 }
 
 .profile-img {
-    border: 3px solid #dc2626 !important;
-    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+    border: 3px solid #555 !important;
+    box-shadow: 0 0 20px rgba(100, 100, 100, 0.2);
     transition: all 0.3s ease;
     transform-style: preserve-3d;
 }
 
 .profile-img:hover {
-    box-shadow: 0 0 35px rgba(220, 38, 38, 0.6);
+    box-shadow: 0 0 35px rgba(150, 150, 150, 0.3);
     transform: translateZ(20px) scale(1.05);
 }
 
@@ -64,8 +69,8 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid rgba(255,0,0,0.5);
-    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(80, 80, 80, 0.5);
+    background: rgba(30, 30, 30, 0.8);
     cursor: pointer;
     transition: all 0.3s ease;
     transform-style: preserve-3d;
@@ -73,7 +78,8 @@ body {
 
 .btn:hover {
     transform: translateY(4px) scale(1.05);
-    box-shadow: 0 0 20px rgba(255,0,0,0.6);
+    box-shadow: 0 0 25px rgba(150, 150, 150, 0.2);
+    border-color: rgba(150, 150, 150, 0.6);
 }
 
 .btn img {
@@ -95,19 +101,26 @@ body {
 .back-button {
     transition: all 0.3s ease;
     transform-style: preserve-3d;
+    border: 1px solid rgba(80, 80, 80, 0.3);
+    background: rgba(20, 20, 20, 0.8) !important;
 }
 
 .back-button:hover {
     transform: translateX(-5px);
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    box-shadow: 0 0 25px rgba(150, 150, 150, 0.15);
+    border-color: rgba(150, 150, 150, 0.4);
+}
+
+.back-button .text-red-500 {
+    color: #aaa !important;
 }
 
 #copy-warning {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: rgba(255,0,0,0.9);
-    color: #fff;
+    background: rgba(60, 60, 60, 0.95);
+    color: #e0e0e0;
     padding: 8px 14px;
     border-radius: 6px;
     font-size: 12px;
@@ -116,6 +129,7 @@ body {
     pointer-events: none;
     transition: opacity 0.2s ease;
     z-index: 50;
+    border: 1px solid rgba(100, 100, 100, 0.2);
 }
 
 #copy-warning.show {
@@ -127,12 +141,16 @@ body {
     inset: 0;
     z-index: 9999;
     backdrop-filter: blur(12px);
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(10, 10, 10, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: opacity 0.5s ease;
+}
+
+#enter-screen .text-red-600 {
+    color: #aaa !important;
 }
 
 #enter-screen .animate-pulse {
@@ -153,6 +171,11 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: brightness(0.7) contrast(1.2);
+}
+
+.icon img:hover {
+    filter: brightness(1) contrast(1.2);
 }
 
 .card-glow > * {
@@ -178,47 +201,56 @@ body {
 }
 
 .bg-black {
-    background-color: #000 !important;
+    background-color: #0a0a0a !important;
 }
 
 .bg-black\/60 {
-    background-color: rgba(0, 0, 0, 0.6) !important;
+    background-color: rgba(20, 20, 20, 0.85) !important;
 }
 
 .bg-black\/70 {
-    background-color: rgba(0, 0, 0, 0.7) !important;
+    background-color: rgba(15, 15, 15, 0.9) !important;
 }
 
 .border-red-600\/80 {
-    border-color: rgba(220, 38, 38, 0.8) !important;
-    border-width: 2px !important;
+    border-color: rgba(80, 80, 80, 0.4) !important;
+    border-width: 1px !important;
 }
 
 .text-red-500 {
-    color: #ef4444 !important;
+    color: #aaa !important;
 }
 
 .text-red-600 {
-    color: #dc2626 !important;
+    color: #999 !important;
 }
 
 .text-gray-400 {
-    color: #9ca3af !important;
+    color: #888 !important;
 }
 
 .text-gray-500 {
-    color: #6b7280 !important;
+    color: #666 !important;
 }
 
 .max-w-2xl {
-    background-color: rgba(0, 0, 0, 0.6) !important;
-    border-color: rgba(220, 38, 38, 0.8) !important;
+    background-color: rgba(20, 20, 20, 0.92) !important;
+    border-color: rgba(80, 80, 80, 0.3) !important;
 }
 
 div, section, main, header, footer, a, article {
     background-color: transparent;
 }
 
-html, body {
-    background-color: #000 !important;
+#terminal-big {
+    white-space: pre;
+    color: #aaa;
+    text-align: center;
+    font-size: 5rem;
+    line-height: 4rem;
+    min-height: 8rem;
+}
+
+#terminal-big .text-red-600 {
+    color: #aaa !important;
 }
