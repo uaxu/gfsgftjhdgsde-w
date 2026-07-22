@@ -218,6 +218,20 @@ const PROFILES = {
         titleAnimation: ['h','hx','hxa','hxar','hxart','hxar','hxa','hx'],
         buttons: []
     },
+    sig: {
+        name: 'sig',
+        group: 'Sancta',
+        image: '/assets/sig.png',
+        titleAnimation: ['s','si','sig','si'],
+        buttons: []
+    },
+    world: {
+        name: 'world',
+        group: 'Sancta',
+        image: '/assets/world.png',
+        titleAnimation: ['w','wo','wor','worl','world','worl','wor','wo'],
+        buttons: []
+    },
     '404': {
         name: '404',
         group: 'Fidelis',
