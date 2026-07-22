@@ -2,7 +2,7 @@ const PROFILES = {
     under: {
         name: 'under',
         group: 'Consortia',
-        image: '/assets/under.png',
+        image: '/assets/under.gif',
         music: '/assets/tripsyelakeramor.mp3',
         titleAnimation: ['u','un','und','unde','under','unde','und','un'],
         buttons: [
