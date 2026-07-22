@@ -5,59 +5,30 @@
 }
 
 body {
-    background: #000 !important;
-    min-height: 100vh;
-    overflow-x: hidden;
+    background: #0a0a0a !important;
+    height: 100vh;
+    overflow: hidden;
     font-family: monospace;
     color: #c0c0c0;
     cursor: default;
 }
 
 html, body {
-    background-color: #000 !important;
+    background-color: #0a0a0a !important;
 }
 
-@font-face {
-    font-family: 'JMH Typewriter';
-    src: url('/assets/JMHTypewriter.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+.card-glow {
+    background-color: rgba(15, 15, 15, 0.95) !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(60, 60, 60, 0.15) !important;
+    transform-style: preserve-3d;
+    transition: transform 0.08s ease-out;
+    will-change: transform;
+    border: 1px solid rgba(60, 60, 60, 0.3);
 }
 
-#terminal-big {
-    white-space: pre;
-    color: #aaa;
-    text-align: center;
-    font-size: 5rem;
-    font-family: 'JMH Typewriter', monospace;
-    line-height: 4rem;
-    min-height: 8rem;
-}
-
-#enter-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    backdrop-filter: blur(12px);
-    background: rgba(0, 0, 0, 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: opacity 0.5s ease;
-}
-
-#enter-screen .text-red-600 {
-    color: #aaa !important;
-}
-
-#enter-screen .animate-pulse {
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+.card-glow.active {
+    transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
 }
 
 .snowflake {
@@ -74,82 +45,16 @@ html, body {
     to { transform: translateY(120vh); }
 }
 
-.card-glow {
-    background-color: rgba(15, 15, 15, 0.95) !important;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 20px rgba(60, 60, 60, 0.1) !important;
-    transform-style: preserve-3d;
-    transition: transform 0.08s ease-out;
-    will-change: transform;
-    border: 1px solid rgba(60, 60, 60, 0.3);
-}
-
-.card-glow:hover {
-    box-shadow: 0 0 30px rgba(100, 100, 100, 0.15);
-    transform: scale(1.02);
-}
-
-.card-glow .text-red-500 {
-    color: #aaa !important;
-}
-
-.card-glow .text-gray-400 {
-    color: #777 !important;
-}
-
-.card-glow .text-gray-500 {
-    color: #555 !important;
-}
-
-.card-glow img {
-    filter: grayscale(0.3) brightness(0.8);
+.profile-img {
+    border: 3px solid #444 !important;
+    box-shadow: 0 0 20px rgba(60, 60, 60, 0.15);
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
 }
 
-.card-glow:hover img {
-    filter: grayscale(0) brightness(1);
-}
-
-#card, .max-w-2xl {
-    background-color: rgba(15, 15, 15, 0.95) !important;
-}
-
-.bg-black {
-    background-color: #000 !important;
-}
-
-.bg-black\/60 {
-    background-color: rgba(15, 15, 15, 0.9) !important;
-}
-
-.bg-black\/70 {
-    background-color: rgba(10, 10, 10, 0.95) !important;
-}
-
-.border-red-600\/80 {
-    border-color: rgba(60, 60, 60, 0.5) !important;
-    border-width: 1px !important;
-}
-
-.text-red-500 {
-    color: #aaa !important;
-}
-
-.text-red-600 {
-    color: #999 !important;
-}
-
-.text-gray-400 {
-    color: #777 !important;
-}
-
-.text-gray-500 {
-    color: #555 !important;
-}
-
-.max-w-2xl {
-    background-color: rgba(15, 15, 15, 0.95) !important;
-    border-color: rgba(60, 60, 60, 0.3) !important;
+.profile-img:hover {
+    box-shadow: 0 0 35px rgba(100, 100, 100, 0.2);
+    transform: translateZ(20px) scale(1.05);
 }
 
 .btn {
@@ -180,32 +85,13 @@ html, body {
     border-radius: 8px;
 }
 
-.icon {
-    width: 40px;
-    height: 40px;
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
 }
 
-.icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: brightness(0.6) contrast(1.2);
-}
-
-.icon img:hover {
-    filter: brightness(0.9) contrast(1.2);
-}
-
-.profile-img {
-    border: 3px solid #444 !important;
-    box-shadow: 0 0 20px rgba(60, 60, 60, 0.15);
-    transition: all 0.3s ease;
-    transform-style: preserve-3d;
-}
-
-.profile-img:hover {
-    box-shadow: 0 0 35px rgba(100, 100, 100, 0.2);
-    transform: translateZ(20px) scale(1.05);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .back-button {
@@ -246,25 +132,50 @@ html, body {
     opacity: 1;
 }
 
-.fade-in {
-    animation: fadeIn 0.8s ease-out;
+#enter-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    backdrop-filter: blur(12px);
+    background: rgba(10, 10, 10, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+#enter-screen .text-red-600 {
+    color: #aaa !important;
+}
+
+#enter-screen .animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0.6) contrast(1.2);
+}
+
+.icon img:hover {
+    filter: brightness(0.9) contrast(1.2);
 }
 
 .card-glow > * {
     transform-style: preserve-3d;
-}
-
-header .text-gray-500 {
-    color: #555 !important;
-}
-
-footer {
-    color: #444 !important;
 }
 
 @media (max-width: 640px) {
@@ -285,6 +196,76 @@ footer {
     }
 }
 
+.bg-black {
+    background-color: #0a0a0a !important;
+}
+
+.bg-black\/60 {
+    background-color: rgba(15, 15, 15, 0.9) !important;
+}
+
+.bg-black\/70 {
+    background-color: rgba(10, 10, 10, 0.95) !important;
+}
+
+.border-red-600\/80 {
+    border-color: rgba(60, 60, 60, 0.5) !important;
+    border-width: 1px !important;
+}
+
+.text-red-500 {
+    color: #aaa !important;
+}
+
+.text-red-600 {
+    color: #999 !important;
+}
+
+.text-gray-400 {
+    color: #777 !important;
+}
+
+.text-gray-500 {
+    color: #555 !important;
+}
+
+.max-w-2xl {
+    background-color: rgba(15, 15, 15, 0.95) !important;
+    border-color: rgba(60, 60, 60, 0.3) !important;
+}
+
 div, section, main, header, footer, a, article {
     background-color: transparent;
+}
+
+#terminal-big {
+    white-space: pre;
+    color: #aaa;
+    text-align: center;
+    font-size: 5rem;
+    line-height: 4rem;
+    min-height: 8rem;
+}
+
+#terminal-big .text-red-600 {
+    color: #aaa !important;
+}
+
+@font-face {
+    font-family: 'JMH Typewriter';
+    src: url('/assets/JMHTypewriter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#terminal-big {
+    font-family: 'JMH Typewriter', monospace;
+}
+
+header .text-gray-500 {
+    color: #555 !important;
+}
+
+footer {
+    color: #444 !important;
 }
