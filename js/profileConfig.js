@@ -2,27 +2,27 @@
 // MAPA DE ÍCONES
 // ============================================
 var iconMap = {
-    discord: 'https://cdn.simpleicons.org/discord/8a0002',
-    telegram: 'https://cdn.simpleicons.org/telegram/8a0002',
-    instagram: 'https://cdn.simpleicons.org/instagram/8a0002',
-    twitter: 'https://cdn.simpleicons.org/twitter/8a0002',
-    youtube: 'https://cdn.simpleicons.org/youtube/8a0002',
-    github: 'https://cdn.simpleicons.org/github/8a0002',
-    tiktok: 'https://cdn.simpleicons.org/tiktok/8a0002',
-    snapchat: 'https://cdn.simpleicons.org/snapchat/8a0002',
-    pinterest: 'https://cdn.simpleicons.org/pinterest/8a0002',
-    spotify: 'https://cdn.simpleicons.org/spotify/8a0002',
-    steam: 'https://cdn.simpleicons.org/steam/8a0002',
-    roblox: 'https://cdn.simpleicons.org/roblox/8a0002',
-    onlyfans: 'https://cdn.simpleicons.org/onlyfans/8a0002',
-    gmail: 'https://cdn.simpleicons.org/gmail/8a0002',
-    bitcoin: 'https://cdn.simpleicons.org/bitcoin/8a0002',
-    ethereum: 'https://cdn.simpleicons.org/ethereum/8a0002',
-    litecoin: 'https://cdn.simpleicons.org/litecoin/8a0002',
-    solana: 'https://cdn.simpleicons.org/solana/8a0002',
-    polygon: 'https://cdn.simpleicons.org/gmail/8a0002',
-    namemc: 'https://cdn.simpleicons.org/gmail/8a0002',
-    spacehey: 'https://cdn.simpleicons.org/gmail/8a0002'
+    discord: 'https://cdn.simpleicons.org/discord/000000',
+    telegram: 'https://cdn.simpleicons.org/telegram/000000',
+    instagram: 'https://cdn.simpleicons.org/instagram/000000',
+    twitter: 'https://cdn.simpleicons.org/twitter/000000',
+    youtube: 'https://cdn.simpleicons.org/youtube/000000',
+    github: 'https://cdn.simpleicons.org/github/000000',
+    tiktok: 'https://cdn.simpleicons.org/tiktok/000000',
+    snapchat: 'https://cdn.simpleicons.org/snapchat/000000',
+    pinterest: 'https://cdn.simpleicons.org/pinterest/000000',
+    spotify: 'https://cdn.simpleicons.org/spotify/000000',
+    steam: 'https://cdn.simpleicons.org/steam/000000',
+    roblox: 'https://cdn.simpleicons.org/roblox/000000',
+    onlyfans: 'https://cdn.simpleicons.org/onlyfans/000000',
+    gmail: 'https://cdn.simpleicons.org/gmail/000000',
+    bitcoin: 'https://cdn.simpleicons.org/bitcoin/000000',
+    ethereum: 'https://cdn.simpleicons.org/ethereum/000000',
+    litecoin: 'https://cdn.simpleicons.org/litecoin/000000',
+    solana: 'https://cdn.simpleicons.org/solana/000000',
+    polygon: 'https://cdn.simpleicons.org/gmail/000000',
+    namemc: 'https://cdn.simpleicons.org/gmail/000000',
+    spacehey: 'https://cdn.simpleicons.org/gmail/000000'
 };
 
 // ============================================
@@ -217,7 +217,7 @@ function loadAsciiArt() {
             return res.text();
         })
         .then(function(art) {
-            console.log('%c' + art, 'color:#8a0002; font-family:monospace; font-size:14px;');
+            console.log('%c' + art, 'color:#000000; font-family:monospace; font-size:14px;');
         })
         .catch(function() {});
 }
