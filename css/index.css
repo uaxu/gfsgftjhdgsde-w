@@ -3,74 +3,61 @@ body {
     overflow-y: auto !important;
     min-height: 100vh !important;
     height: auto !important;
-    padding: 0 1rem !important;
-}
-
-.flex {
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 0.75rem !important;
-}
-
-.card-glow, .w-40 {
-    width: 140px !important;
-    min-width: 120px !important;
-    max-width: 160px !important;
-    flex-shrink: 0 !important;
-    height: 200px !important;
-}
-
-.card-glow img {
-    width: 60px !important;
-    height: 60px !important;
-}
-
-.card-glow .text-lg {
-    font-size: 0.9rem !important;
 }
 
 #terminal-big {
-    font-size: 4rem !important;
-    line-height: 3.5rem !important;
-    margin-top: 2rem !important;
-    margin-bottom: 2rem !important;
+    color: #aaa !important;
 }
 
-header {
-    width: 100% !important;
-    text-align: center !important;
-    margin-top: 2rem !important;
-    margin-bottom: 1rem !important;
+.card-glow {
+    box-shadow: 0 0 15px rgba(60, 60, 60, 0.2) !important;
+    border: 1px solid rgba(60, 60, 60, 0.3) !important;
 }
 
-main.flex {
-    width: 100% !important;
-    max-width: 100% !important;
+.card-glow:hover {
+    box-shadow: 0 0 25px rgba(100, 100, 100, 0.15) !important;
+}
+
+.bg-black {
+    background-color: #0a0a0a !important;
+}
+
+.border-red-600\/80 {
+    border-color: rgba(60, 60, 60, 0.5) !important;
+}
+
+.text-red-500 {
+    color: #aaa !important;
+}
+
+.text-red-600 {
+    color: #999 !important;
+}
+
+.text-gray-400 {
+    color: #777 !important;
+}
+
+.text-gray-500 {
+    color: #555 !important;
+}
+
+.snowflake {
+    color: rgba(100, 100, 100, 0.2) !important;
+}
+
+#enter-screen {
+    background: rgba(10, 10, 10, 0.95) !important;
+}
+
+#enter-screen .text-red-600 {
+    color: #aaa !important;
+}
+
+header .text-gray-500 {
+    color: #555 !important;
 }
 
 footer {
-    margin-top: 3rem !important;
-}
-
-@media (max-width: 640px) {
-    .card-glow, .w-40 {
-        width: 100px !important;
-        min-width: 80px !important;
-        max-width: 120px !important;
-        height: 160px !important;
-    }
-    .card-glow img {
-        width: 45px !important;
-        height: 45px !important;
-    }
-    .card-glow .text-lg {
-        font-size: 0.75rem !important;
-    }
-    #terminal-big {
-        font-size: 2.5rem !important;
-        line-height: 2.2rem !important;
-    }
-    body {
-        padding: 0 0.5rem !important;
-    }
+    color: #444 !important;
 }
