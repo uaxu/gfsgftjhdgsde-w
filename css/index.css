@@ -1,0 +1,55 @@
+body {
+    background: #0a0a0a;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: monospace;
+    color: #e0e0e0;
+}
+
+.card-glow {
+    box-shadow: 0 0 20px rgba(100, 100, 100, 0.1);
+    border: 1px solid rgba(80, 80, 80, 0.2);
+    transition: all 0.3s ease;
+}
+
+.card-glow:hover {
+    box-shadow: 0 0 30px rgba(150, 150, 150, 0.15);
+    transform: scale(1.02);
+}
+
+.card-glow .text-red-500 {
+    color: #aaa !important;
+}
+
+.card-glow .text-gray-400 {
+    color: #888 !important;
+}
+
+.card-glow .text-gray-500 {
+    color: #666 !important;
+}
+
+.card-glow a {
+    text-decoration: none;
+}
+
+.card-glow img {
+    filter: grayscale(0.3) brightness(0.8);
+    transition: all 0.3s ease;
+}
+
+.card-glow:hover img {
+    filter: grayscale(0) brightness(1);
+}
+
+.border-red-600\/80 {
+    border-color: rgba(80, 80, 80, 0.3) !important;
+}
+
+header .text-gray-500 {
+    color: #666 !important;
+}
+
+footer {
+    color: #555 !important;
+}
