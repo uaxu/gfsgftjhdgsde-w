@@ -1,0 +1,63 @@
+body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    min-height: 100vh !important;
+    height: auto !important;
+}
+
+#terminal-big {
+    color: #aaa !important;
+}
+
+.card-glow {
+    box-shadow: 0 0 15px rgba(60, 60, 60, 0.2) !important;
+    border: 1px solid rgba(60, 60, 60, 0.3) !important;
+}
+
+.card-glow:hover {
+    box-shadow: 0 0 25px rgba(100, 100, 100, 0.15) !important;
+}
+
+.bg-black {
+    background-color: #0a0a0a !important;
+}
+
+.border-red-600\/80 {
+    border-color: rgba(60, 60, 60, 0.5) !important;
+}
+
+.text-red-500 {
+    color: #aaa !important;
+}
+
+.text-red-600 {
+    color: #999 !important;
+}
+
+.text-gray-400 {
+    color: #777 !important;
+}
+
+.text-gray-500 {
+    color: #555 !important;
+}
+
+.snowflake {
+    color: rgba(100, 100, 100, 0.2) !important;
+}
+
+#enter-screen {
+    background: rgba(10, 10, 10, 0.95) !important;
+}
+
+#enter-screen .text-red-600 {
+    color: #aaa !important;
+}
+
+header .text-gray-500 {
+    color: #555 !important;
+}
+
+footer {
+    color: #444 !important;
+}
