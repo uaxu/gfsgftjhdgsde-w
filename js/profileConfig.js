@@ -37,9 +37,29 @@ function getIconUrl(icon) {
 }
 
 // ============================================
-// FUNÇÕES DE COPY
+// FUNÇÕES DE COPY — grey flash + toast with text
 // ============================================
 function copyText(text, btn) {
+    var done = false;
+    function onSuccess(){
+        if(done) return; done=true;
+        showCopyWarning(text);
+        flashButton(btn);
+    }
+    // modern API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(function(){
+            // fallback to execCommand
+            fallbackCopy(text, onSuccess);
+        });
+        // safety timeout in case promise never resolves (e.g. file://)
+        setTimeout(function(){ if(!done) fallbackCopy(text, onSuccess); }, 600);
+        return;
+    }
+    fallbackCopy(text, onSuccess);
+}
+
+function fallbackCopy(text, cb){
     var textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
@@ -49,120 +69,110 @@ function copyText(text, btn) {
     textArea.style.height = '1px';
     textArea.style.opacity = '0';
     document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    
+    textArea.focus(); textArea.select();
     try {
         var successful = document.execCommand('copy');
-        if (successful) {
-            showCopyWarning();
-            flashButton(btn);
-        }
-    } catch (err) {
-        console.error('Erro ao copiar:', err);
-    }
+        if (successful) cb();
+    } catch (err) { console.error('Erro ao copiar:', err); }
     textArea.remove();
 }
 
-function showCopyWarning() {
+var _copyTimer = null;
+function showCopyWarning(text) {
     var warning = document.getElementById('copy-warning');
     if (!warning) return;
+    var short = (text||'').length > 28 ? text.slice(0,28)+'…' : (text||'Copied');
+    warning.textContent = 'Copied: ' + short;
+    warning.style.opacity = '1';
+    warning.style.transform = 'translateY(0)';
     warning.classList.add('show');
-    setTimeout(function() {
+    clearTimeout(_copyTimer);
+    _copyTimer = setTimeout(function() {
+        warning.style.opacity = '0';
+        warning.style.transform = 'translateY(-6px)';
         warning.classList.remove('show');
-    }, 1200);
+    }, 1700);
 }
 
 function flashButton(btn) {
     if (!btn) return;
-    btn.style.boxShadow = '0 0 25px rgba(255,0,0,0.8)';
+    // grey flash — matches site palette, not red
+    btn.style.boxShadow = '0 0 20px rgba(160,160,160,0.65)';
+    btn.style.borderColor = 'rgba(160,160,160,0.55)';
+    btn.style.transform = 'scale(0.96)';
     setTimeout(function() {
         btn.style.boxShadow = '';
-    }, 300);
+        btn.style.borderColor = '';
+        btn.style.transform = '';
+    }, 280);
 }
 
 // ============================================
-// RESTAURAR URL (remove ?user=)
+// RESTAURAR URL — now handled by router.js
+// nameFromUrl() already normalizes #/name, ?user=name, /name, /repo/name
+// and on file:// keeps the filesystem path valid. Keep this IIFE as a
+// no-op shim so old cached 404 -> ?user redirects still work.
 // ============================================
-(function restoreURL() {
-    var params = new URLSearchParams(window.location.search);
-    var user = params.get('user');
-    if (user) {
-        sessionStorage.setItem('whbf_user', user);
-        var cleanPath = '/' + user + '/';
-        window.history.replaceState({}, '', cleanPath);
-    }
-})();
+// (router.js cleanHashImmediately + nameFromUrl handles it — nothing to do here)
 
 // ============================================
 // FUNÇÃO PARA ANIMAR O TÍTULO
 // ============================================
-function startTitleAnimation() {
-    var user = sessionStorage.getItem('whbf_user') || 'aaa';
-    var profile = PROFILES[user];
-    
-    if (!profile || !profile.titleAnimation) {
-        return;
-    }
+function getCurrentUser() {
+    // router.js is source of truth — falls back to sessionStorage
+    try {
+        if (typeof nameFromUrl === "function") {
+            var n = nameFromUrl();
+            if (n) return n.toLowerCase();
+        }
+    } catch (e) {}
+    return (sessionStorage.getItem('whbf_user') || 'aaa').toLowerCase();
+}
 
+function startTitleAnimation() {
+    var user = getCurrentUser();
+    var profile = PROFILES[user];
+    if (!profile || !profile.titleAnimation) return;
     var frames = profile.titleAnimation;
     var index = 0;
-
-    if (window.titleInterval) {
-        clearInterval(window.titleInterval);
+    if (window.titleInterval) clearInterval(window.titleInterval);
+    function tick(){ document.title = frames[index] || profile.name || 'WHBF'; index = (index + 1) % frames.length; }
+    window.titleInterval = setInterval(tick, 400);
+    // pause when tab hidden — saves battery
+    if(!window._titleVisBound){
+        window._titleVisBound = true;
+        document.addEventListener('visibilitychange', function(){
+            if(document.hidden){ clearInterval(window.titleInterval); window.titleInterval=null; }
+            else if(!window.titleInterval){ window.titleInterval=setInterval(tick,400); }
+        });
     }
-    
-    window.titleInterval = setInterval(function() {
-        document.title = frames[index] || profile.name || 'WHBF';
-        index = (index + 1) % frames.length;
-    }, 400);
 }
 
 // ============================================
-// CARREGAR PERFIL
+// CARREGAR PERFIL — dynamic, works on file:// + GH Pages
 // ============================================
-(function loadProfile() {
-    var user = sessionStorage.getItem('whbf_user') || 'aaa';
+function renderProfile(user) {
     var profile = PROFILES[user];
-
     if (!profile) {
         window.location.href = 'https://whbf.cc';
-        return;
+        return false;
     }
-    
     document.title = profile.name;
-    
     var imgEl = document.getElementById('profile-img');
-    if (imgEl) {
-        imgEl.src = profile.image;
-        imgEl.alt = profile.name;
-    }
-    
+    if (imgEl) { imgEl.src = (typeof assetUrl === "function" ? assetUrl(profile.image) : profile.image); imgEl.alt = profile.name; }
     var nameEl = document.getElementById('profile-name');
-    if (nameEl) {
-        nameEl.textContent = profile.name;
-    }
-    
+    if (nameEl) nameEl.textContent = profile.name;
     var groupEl = document.getElementById('profile-group');
-    if (groupEl) {
-        groupEl.textContent = '- ' + profile.group + ' -';
-    }
-    
+    if (groupEl) groupEl.textContent = '- ' + profile.group + ' -';
     var musicEl = document.getElementById('bg-music');
-    if (musicEl) {
-        musicEl.src = profile.music;
-    }
-
+    if (musicEl) musicEl.src = (typeof assetUrl === "function" ? assetUrl(profile.music) : profile.music);
     var container = document.getElementById('buttons-container');
-    if (!container) return;
-    
+    if (!container) return true;
     container.innerHTML = '';
-
     profile.buttons.forEach(function(btn) {
         var iconUrl = getIconUrl(btn.icon);
         var isLink = btn.label.startsWith('http://') || btn.label.startsWith('https://');
         var element;
-        
         if (isLink) {
             element = document.createElement('a');
             element.href = btn.label;
@@ -173,30 +183,94 @@ function startTitleAnimation() {
             element.className = 'btn';
             element.dataset.copy = btn.label;
             element.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                e.preventDefault(); e.stopPropagation();
                 copyText(this.dataset.copy, this);
             };
         }
         element.innerHTML = '<div class="icon"><img src="' + iconUrl + '" alt="' + btn.icon + '"></div>';
         container.appendChild(element);
     });
+    setTimeout(function() { startTitleAnimation(); }, 100);
+    return true;
+}
 
-    setTimeout(function() {
-        startTitleAnimation();
-    }, 100);
+(function loadProfile() {
+    var user = getCurrentUser();
+    if (!renderProfile(user) && typeof nameFromUrl === "function") {
+        // if nameFromUrl gave a bad slug, fall back to home
+        window.location.href = 'https://whbf.cc';
+    }
 })();
 
+// ── dynamic SPA navigation on profile.html (back/forward + in-page switches)
+window.addEventListener("popstate", function (e) {
+    if (typeof hashGuard !== "undefined" && hashGuard) return;
+    // e.state.profile is set by pushProfileUrl/replaceState
+    var n = (e.state && e.state.profile) ? String(e.state.profile).toLowerCase() : getCurrentUser();
+    // re-render without full reload — makes profile switches instant
+    renderProfile(n);
+});
+window.addEventListener("hashchange", function () {
+    if (typeof hashGuard !== "undefined" && hashGuard) return;
+    var n = getCurrentUser();
+    if (n && PROFILES[n]) renderProfile(n);
+});
+
 // ============================================
-// ENTER SCREEN
+// ENTER SCREEN + VOLUME SCROLLER (opposite leave button)
 // ============================================
 (function setupEnterScreen() {
     var enterScreen = document.getElementById('enter-screen');
     var music = document.getElementById('bg-music');
+    var slider = document.getElementById('volume-slider');
+    var valEl = document.getElementById('volume-val');
+
+    // restore persisted volume
+    var initVol = 0.1;
+    try{
+        var saved = localStorage.getItem('whbf_volume');
+        if(saved!==null) initVol = Math.max(0,Math.min(1,parseFloat(saved)));
+    }catch(e){}
+    if(music) music.volume = initVol;
+    function setPct(el, v){ el.style.setProperty('--pct', (v*100)+'%'); }
+    if(slider){
+        slider.value = initVol; setPct(slider, initVol);
+        if(valEl) valEl.textContent = Math.round(initVol*100)+'%';
+        // icon muted state
+        var _ic = document.getElementById('vol-icon'); if(_ic) _ic.classList.toggle('muted', initVol===0);
+    }
+
+    function bindSlider(){
+        if(!slider || !music) return;
+        slider.addEventListener('input', function(){
+            var v = parseFloat(this.value);
+            music.volume = v; setPct(this, v);
+            if(valEl) valEl.textContent = Math.round(v*100)+'%';
+            var ic=document.getElementById('vol-icon'); if(ic) ic.classList.toggle('muted', v===0);
+            try{ localStorage.setItem('whbf_volume', String(v)); }catch(e){}
+        });
+        var icon = document.getElementById('vol-icon');
+        if(icon){
+            function toggleMute(){
+                if(music.volume>0){ slider.dataset.prev=String(music.volume); music.volume=0; slider.value=0; }
+                else { var prev=parseFloat(slider.dataset.prev||'0.1'); music.volume=prev; slider.value=prev; }
+                setPct(slider, music.volume);
+                if(valEl) valEl.textContent = Math.round(music.volume*100)+'%';
+                icon.classList.toggle('muted', music.volume===0);
+                try{ localStorage.setItem('whbf_volume', String(music.volume)); }catch(e){}
+            }
+            icon.addEventListener('click', toggleMute);
+            icon.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleMute(); }});
+        }
+    }
+    bindSlider();
+
     if (!enterScreen) return;
+    enterScreen.setAttribute('tabindex','0'); enterScreen.setAttribute('role','button'); enterScreen.setAttribute('aria-label','Enter');
+    enterScreen.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterScreen.click(); }});
     enterScreen.addEventListener('click', function() {
         if (music) {
-            music.volume = 0.1;
+            // volume already set from slider/persisted
             music.play().catch(function() {});
         }
         this.style.opacity = '0';
@@ -211,13 +285,15 @@ function startTitleAnimation() {
 // ASCII ART
 // ============================================
 function loadAsciiArt() {
-    fetch('/whbfascii.txt')
-        .then(function(res) {
+    var tryFetch = function (url) {
+        return fetch(url).then(function(res) {
             if (!res.ok) throw new Error('Ficheiro não encontrado');
             return res.text();
-        })
+        });
+    };
+    tryFetch('/whbfascii.txt').catch(function() { return tryFetch('whbfascii.txt'); })
         .then(function(art) {
-            console.log('%c' + art, 'color:#000000; font-family:monospace; font-size:14px;');
+            if (art) console.log('%c' + art, 'color:#000000; font-family:monospace; font-size:14px;');
         })
         .catch(function() {});
 }

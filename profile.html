@@ -4,8 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <script>if(location.protocol==="file:"){document.write('<link rel="stylesheet" href="/css/main.css">');}</script>
+    <style>
+    /* beautiful volume scroller — profile, opposite leave button */
+    #volume-control {
+      position: fixed; top: 32px; right: 32px; z-index: 20;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(18,18,18,0.92); border: 1px solid rgba(70,70,70,0.28);
+      border-radius: 999px; padding: 7px 12px 7px 10px;
+      backdrop-filter: blur(10px) saturate(1.2);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #volume-control:hover{ border-color: rgba(90,90,90,0.45); box-shadow: 0 6px 22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06); }
+    #volume-control .vol-icon{
+      width:16px; height:16px; display:flex; align-items:center; justify-content:center;
+      color:#888; cursor:pointer; transition: color 0.15s, transform 0.15s; flex-shrink:0;
+    }
+    #volume-control .vol-icon:hover{ color:#c0c0c0; transform: scale(1.08); }
+    #volume-control .vol-icon.muted{ color:#555; }
+    #volume-control input[type="range"]{
+      -webkit-appearance:none; appearance:none;
+      width: 88px; height: 4px; border-radius: 999px; outline:none; cursor:pointer;
+      background: linear-gradient(to right, #c0c0c0 0%, #c0c0c0 var(--pct,10%), rgba(55,55,55,0.9) var(--pct,10%), rgba(55,55,55,0.9) 100%);
+      transition: background 0.1s;
+    }
+    #volume-control input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:#e8e8e8; border:2px solid #0a0a0a; cursor:pointer;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    #volume-control input[type="range"]:hover::-webkit-slider-thumb{ transform: scale(1.15); background:#fff; box-shadow: 0 2px 10px rgba(0,0,0,0.7); }
+    #volume-control input[type="range"]:active::-webkit-slider-thumb{ transform: scale(0.95); }
+    #volume-control input[type="range"]::-moz-range-thumb{
+      width:13px; height:13px; border-radius:50%; background:#e8e8e8; border:2px solid #0a0a0a; cursor:pointer;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    }
+    #volume-control input[type="range"]::-moz-range-track{ height:4px; border-radius:999px; background: rgba(55,55,55,0.9); }
+    #volume-control #volume-val{ font-size:11px; color:#8a8a8a; font-variant-numeric: tabular-nums; min-width:30px; text-align:right; letter-spacing:0.02em; }
+    @media(max-width:640px){ #volume-control{ top:16px; right:16px; padding:6px 10px; gap:8px; } #volume-control input[type="range"]{ width:72px; } }
+    /* beautiful back button */
+    .back-button{
+      gap: 6px; padding: 0 14px 0 10px; width: auto !important; min-width: 44px; height: 38px !important;
+      border-radius: 999px !important; font-size: 12px !important; letter-spacing: 0.08em; text-transform: lowercase;
+      background: rgba(18,18,18,0.92) !important; border: 1px solid rgba(70,70,70,0.28) !important;
+      backdrop-filter: blur(10px) saturate(1.2); box-shadow: 0 4px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+      color: #9a9a9a !important; font-weight: 500;
+      transition: all 0.22s cubic-bezier(0.2,0.8,0.2,1) !important;
+    }
+    .back-button:hover{
+      transform: translateX(-2px) !important;
+      background: rgba(25,25,25,0.96) !important; border-color: rgba(90,90,90,0.45) !important;
+      color: #d0d0d0 !important; box-shadow: 0 6px 22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+    }
+    .back-button:active{ transform: translateX(-1px) scale(0.98) !important; }
+    .back-button svg{ flex-shrink:0; transition: transform 0.2s; }
+    .back-button:hover svg{ transform: translateX(-1px); }
+    /* copy toast — grey theme */
+    #copy-warning{ background: rgba(30,30,30,0.96) !important; color:#c0c0c0 !important; border:1px solid rgba(60,60,60,0.4) !important; box-shadow:0 4px 20px rgba(0,0,0,0.6); }
+    </style>
 </head>
 <body class="flex flex-col items-center justify-center px-4 min-h-screen bg-black">
 
@@ -16,28 +75,44 @@
     </div>
 
     <a href="https://whbf.cc" 
-       class="fixed top-8 left-8 z-20 back-button
-              w-12 h-12 bg-black/60 backdrop-blur-md border border-red-600/80 rounded-xl
-              flex items-center justify-center text-red-500 text-2xl hover:scale-105 transition">
-        ←
+       class="fixed top-8 left-8 z-20 back-button flex items-center justify-center"
+       aria-label="Back to home">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 12L6 8L10 4"></path></svg>
+        <span>back</span>
     </a>
 
-    <div class="max-w-2xl w-full z-10 fade-in card-glow p-8 md:p-12 bg-black/60 backdrop-blur-md border border-red-600/80 rounded-2xl opacity-0" id="card">
+    <!-- beautiful volume scroller — opposite leave button -->
+    <div id="volume-control" title="Volume — click icon to mute">
+      <span class="vol-icon" id="vol-icon" aria-label="Mute toggle" role="button" tabindex="0">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 6.5 6 10.5 3 10.5 13 6.5 10 3 10"></polygon><path d="M11.5 6.5a4 4 0 0 1 0 3"></path><path d="M13 4.5a7 7 0 0 1 0 7"></path></svg>
+      </span>
+      <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.1" aria-label="Volume">
+      <span id="volume-val">10%</span>
+    </div>
+
+    <div class="max-w-2xl w-full z-10 fade-in card-glow p-8 md:p-12 bg-black/60 backdrop-blur-md border border-gray-600/30 rounded-2xl opacity-0" id="card">
         <div class="flex flex-col items-center text-center mb-8">
-            <img id="profile-img" src="" alt="Profile" class="profile-img w-32 h-32 rounded-full mb-4 object-cover border-2 border-red-600/50">
-            <h1 id="profile-name" class="text-2xl font-bold text-red-500 lowercase tracking-wider mb-2" style="transform: translateZ(10px);"></h1>
+            <img id="profile-img" src="" alt="Profile" class="profile-img w-32 h-32 rounded-full mb-4 object-cover border-2 border-gray-600/30">
+            <h1 id="profile-name" class="text-2xl font-bold text-gray-300 lowercase tracking-wider mb-2" style="transform: translateZ(10px);"></h1>
             <p id="profile-group" class="text-xs text-gray-400 tracking-wide" style="transform: translateZ(10px);"></p>
         </div>
         <div id="buttons-container" class="flex flex-wrap justify-center gap-4"></div>
     </div>
 
-    <div id="copy-warning" style="position: fixed; top: 20px; right: 20px; background: rgba(255,0,0,0.9); color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 50;">
-        The text was copied!
+    <div id="copy-warning" style="position: fixed; top: 20px; right: 20px; background: rgba(30,30,30,0.96); color: #c0c0c0; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease; transform: translateY(-6px); z-index: 50; border:1px solid rgba(60,60,60,0.4);">
+        Copied to clipboard
     </div>
 
-    <audio id="bg-music" src="" loop></audio>
+    <audio id="bg-music" src="" loop preload="none"></audio>
     
-    <script src="/js/config.js"></script>
-    <script src="/js/profileConfig.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/profileConfig.js"></script>
+    <script>
+      if (typeof PROFILES === "undefined") {
+        document.write('<script src="/js/config.js"><\/script>');
+        document.write('<script src="/js/router.js"><\/script>');
+      }
+    </script>
 </body>
 </html>

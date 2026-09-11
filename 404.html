@@ -27,11 +27,36 @@
 <body>
     <div class="loader">❆</div>
     <script>
+        // 404.html — GitHub Pages SPA fallback
+        // Works for both custom domain (whbf.cc) and project site (user.github.io/repo)
+        // Supports: /name, /repo/name, #/name, ?user=name
+        // On file:// this file is never served — router.js handles hash/?user directly.
         (function() {
-            var path = window.location.pathname;
-            var user = path.split('/').filter(Boolean)[0] || 'under';
-            sessionStorage.setItem('whbf_user', user);
-            window.location.replace('/profile.html?user=' + user);
+            var path = window.location.pathname || "/";
+            var hash = (window.location.hash || "").replace(/^#\/?/, "").split("?")[0].trim();
+            var search = "";
+            try { search = new URLSearchParams(window.location.search).get("user") || ""; } catch (e) {}
+            var raw = (hash || search || "").trim();
+
+            // if hash or ?user already carries the profile, use it
+            if (!raw) {
+                // take last non-empty path segment (works for /name and /repo/name)
+                var segs = path.split("/").filter(Boolean);
+                raw = (segs.pop() || "").trim();
+                // also handle file-like paths that reached 404
+                try { raw = decodeURIComponent(raw); } catch (e) {}
+                // reject static assets
+                if (/^(index\.html|404\.html|.*\.(html|css|js|png|jpg|jpeg|webp|svg|mp3|mp4|woff2?))$/i.test(raw)) raw = "";
+                if (["audio","img","css","js","api","profile.html"].indexOf(raw.toLowerCase()) !== -1) raw = "";
+            } else {
+                try { raw = decodeURIComponent(raw); } catch (e) {}
+            }
+
+            var user = (raw || "under").toLowerCase().trim() || "under";
+            try { sessionStorage.setItem('whbf_user', user); } catch (e) {}
+            // keep the profile slug visible in history after redirect lands on profile.html?
+            // profile.html's router.js will normalize to /user/ via replaceState.
+            window.location.replace('/profile.html?user=' + encodeURIComponent(user));
         })();
     </script>
 </body>

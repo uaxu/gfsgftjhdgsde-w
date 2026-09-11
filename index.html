@@ -19,9 +19,48 @@
 <meta name="theme-color" content="#000000" />
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/index.css">
-
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/index.css">
+<style>
+/* beautiful volume slider — index */
+#volume-control-index {
+  position: fixed; bottom: 18px; right: 18px; z-index: 20;
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(18,18,18,0.92); border: 1px solid rgba(70,70,70,0.28);
+  border-radius: 999px; padding: 7px 12px 7px 10px;
+  backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#volume-control-index:hover{ border-color: rgba(90,90,90,0.45); box-shadow: 0 6px 22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06); }
+#volume-control-index .vol-icon{
+  width: 16px; height: 16px; display:flex; align-items:center; justify-content:center;
+  color: #888; cursor: pointer; transition: color 0.15s, transform 0.15s; flex-shrink:0;
+}
+#volume-control-index .vol-icon:hover{ color:#c0c0c0; transform: scale(1.08); }
+#volume-control-index .vol-icon.muted{ color:#555; }
+#volume-control-index input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 88px; height: 4px; border-radius: 999px; outline: none; cursor: pointer;
+  background: linear-gradient(to right, #c0c0c0 0%, #c0c0c0 var(--pct,20%), rgba(55,55,55,0.9) var(--pct,20%), rgba(55,55,55,0.9) 100%);
+  transition: background 0.1s;
+}
+#volume-control-index input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%;
+  background: #e8e8e8; border: 2px solid #0a0a0a; cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+#volume-control-index input[type="range"]:hover::-webkit-slider-thumb{ transform: scale(1.15); background:#fff; box-shadow: 0 2px 10px rgba(0,0,0,0.7); }
+#volume-control-index input[type="range"]:active::-webkit-slider-thumb{ transform: scale(0.95); }
+#volume-control-index input[type="range"]::-moz-range-thumb{
+  width:13px; height:13px; border-radius:50%; background:#e8e8e8; border:2px solid #0a0a0a; cursor:pointer;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.6);
+}
+#volume-control-index input[type="range"]::-moz-range-track{ height:4px; border-radius:999px; background: rgba(55,55,55,0.9); }
+#volume-control-index #volume-val-index{ font-size: 11px; color: #8a8a8a; font-variant-numeric: tabular-nums; min-width:30px; text-align:right; letter-spacing:0.02em; }
+@media (max-width: 640px) { #volume-control-index { bottom: 12px; right: 12px; padding: 6px 10px; gap:8px; } #volume-control-index input[type="range"]{ width: 72px; } }
+</style>
 </head>
 
 <body class="min-h-screen flex flex-col items-center px-4">
@@ -35,158 +74,8 @@
 
 <div id="terminal-big" class="mt-24 mb-24"></div>
 
-<header class="mb-6 max-w-3xl text-center z-10">
-  <p class="text-gray-500 tracking-widest text-sm">- Consortia -</p>
-</header>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10">
-  <a href="/profile.html?user=under" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/under.gif" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">under</div>
-    <div class="text-xs text-gray-400 tracking-wide">Consortia</div>
-  </a>
-  <a href="/profile.html?user=pulse" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/pulse.png" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">pulse</div>
-    <div class="text-xs text-gray-400 tracking-wide">Consortia</div>
-  </a>
-</main>
-
-<header class="mb-6 mt-16 max-w-3xl text-center z-10">
-  <p class="text-gray-500 tracking-widest text-sm">- Primera -</p>
-</header>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10 mb-8">
-  <a href="/profile.html?user=tsar" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/tsar.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">tsar</div>
-    <div class="text-xs text-gray-400 tracking-wide">Primera</div>
-  </a>
-  <a href="/profile.html?user=cia" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/cia.jpg" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">cia</div>
-    <div class="text-xs text-gray-400 tracking-wide">Primera</div>
-  </a>
-  <a href="/profile.html?user=hxart" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/hxart.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">hxart</div>
-    <div class="text-xs text-gray-400 tracking-wide">Primera</div>
-  </a>
-  <a href="/profile.html?user=meo" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/meo.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">MEO</div>
-    <div class="text-xs text-gray-400 tracking-wide">Primera</div>
-  </a>
-</main>
-
-<header class="mb-6 mt-16 max-w-3xl text-center z-10">
-  <p class="text-gray-500 tracking-widest text-sm">- Sancta -</p>
-</header>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10 mb-8">
-  <a href="/profile.html?user=zarro" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/zarro.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">zarro</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=rootz" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/rootz.gif" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">rootz</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=kernel" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/kernel.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">kernel</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=nyx" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/nyx.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">nyx</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=sig" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/sig.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">sig</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-</main>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10">
-  <a href="/profile.html?user=cae" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/catcae.webp" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">cae</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=ivan" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/ivan.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">ivan</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=world" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/world.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">world</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=zenya" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/zenya.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">zenya</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=persistive" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/9npm.jpg" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">persistive</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-  <a href="/profile.html?user=lxrpz" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/lxrpz.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">lxrpz</div>
-    <div class="text-xs text-gray-400 tracking-wide">Sancta</div>
-  </a>
-</main>
-
-<header class="mb-6 mt-16 max-w-3xl text-center z-10">
-  <p class="text-gray-500 tracking-widest text-sm">- Fidelis -</p>
-</header>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10 mb-8">
-  <a href="/profile.html?user=zero" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/zero.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">zero</div>
-    <div class="text-xs text-gray-400 tracking-wide">Fidelis</div>
-  </a>
-  <a href="/profile.html?user=lemes" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/lemes.png" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">lemes</div>
-    <div class="text-xs text-gray-400 tracking-wide">Fidelis</div>
-  </a>
-  <a href="/profile.html?user=folques" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/folques.jpg" class="w-20 h-20 rounded-full border border-gray-600 mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500 lowercase">folques</div>
-    <div class="text-xs text-gray-400 tracking-wide">Fidelis</div>
-  </a>
-</main>
-
-<header class="mb-6 mt-16 max-w-3xl text-center z-10">
-  <p class="text-gray-500 tracking-widest text-sm">- Information -</p>
-</header>
-
-<main class="flex flex-col sm:flex-row gap-10 z-10">
-  <a href="https://discord.gg/FqSRRbEMGc" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/whbf.png" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500">WHBF Discord</div>
-    <div class="text-xs text-gray-400 tracking-wide">Discord Server</div>
-  </a>
-  <a href="https://t.me/whbfcc" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/whbf.png" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500">WHBF Telegram</div>
-    <div class="text-xs text-gray-400 tracking-wide">Telegram Channel</div>
-  </a>
-  <a href="https://www.roblox.com/communities/703659855/WHBF#!/about" class="w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow">
-    <img src="/assets/whbf.png" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">
-    <div class="text-lg font-bold text-gray-500">WHBF Roblox</div>
-    <div class="text-xs text-gray-400 tracking-wide">Roblox Group</div>
-  </a>
-</main>
+<!-- auto-generated roster — edit js/config.js only -->
+<div id="roster" class="z-10 w-full max-w-6xl flex flex-col items-center"></div>
 
 <footer class="mt-32 text-xs text-gray-500 tracking-widest z-10">
   © 2026 whbf.cc
@@ -194,7 +83,117 @@
 
 <div class="h-20"></div>
 
-<audio id="bg-music" src="/assets/beyondthesea.mp3" loop></audio>
+<audio id="bg-music" src="/assets/beyondthesea.mp3" loop preload="none"></audio>
+
+<!-- beautiful volume scroller — index -->
+<div id="volume-control-index" title="Volume — click icon to mute">
+  <span class="vol-icon" id="vol-icon-index" aria-label="Mute toggle" role="button" tabindex="0">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 6.5 6 10.5 3 10.5 13 6.5 10 3 10"></polygon><path d="M11.5 6.5a4 4 0 0 1 0 3"></path><path d="M13 4.5a7 7 0 0 1 0 7"></path></svg>
+  </span>
+  <input id="volume-slider-index" type="range" min="0" max="1" step="0.01" value="0.2" aria-label="Volume">
+  <span id="volume-val-index">20%</span>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/router.js"></script>
+<script>
+// ── roster builder — single source: GROUP_ORDER + GROUPED_PROFILES + INFORMATION_LINKS ──
+(function () {
+  var roster = document.getElementById('roster');
+  if (!roster) return;
+
+  function asset(p){ return (typeof assetUrl==="function"?assetUrl(p):p); }
+
+  function profileHref(id){
+    if (location.protocol === "file:") return "profile.html#/" + encodeURIComponent(id);
+    return "/" + encodeURIComponent(id);
+  }
+
+  function makeCard(id, data){
+    var a = document.createElement('a');
+    a.href = profileHref(id);
+    a.className = "w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow";
+    a.setAttribute('data-profile', id);
+    // a11y
+    a.setAttribute('aria-label', data.name + ' — ' + data.group);
+    var imgSrc = asset(data.image);
+    a.innerHTML =
+      '<img src="'+ imgSrc +'" alt="'+ data.name +'" loading="lazy" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">' +
+      '<div class="text-lg font-bold text-gray-500 lowercase">'+ data.name +'</div>' +
+      '<div class="text-xs text-gray-400 tracking-wide">'+ data.group +'</div>';
+    // SPA click
+    a.addEventListener('click', function(e){
+      if (e.ctrlKey || e.metaKey || e.button===1) return;
+      if (location.protocol==="file:") return;
+      e.preventDefault();
+      try{ sessionStorage.setItem('whbf_user', id); }catch(err){}
+      try{ history.pushState({profile:id},"","/"+encodeURIComponent(id)); }catch(err2){}
+      location.href = "/profile.html?user=" + encodeURIComponent(id);
+    });
+    return a;
+  }
+
+  function makeInfoCard(link){
+    var a = document.createElement('a');
+    a.href = link.href; a.target="_blank"; a.rel="noopener";
+    a.className = "w-40 h-64 bg-black border border-gray-600/80 rounded-xl flex flex-col items-center justify-center hover:scale-105 transition card-glow";
+    a.innerHTML =
+      '<img src="'+ asset(link.img) +'" alt="'+link.label+'" loading="lazy" class="w-20 h-20 rounded-full border border-transparent mb-4 object-cover">' +
+      '<div class="text-lg font-bold text-gray-500">'+link.label+'</div>' +
+      '<div class="text-xs text-gray-400 tracking-wide">'+link.sub+'</div>';
+    return a;
+  }
+
+  // render groups in GROUP_ORDER order — insertion order inside each group is preserved
+  (typeof GROUP_ORDER!=="undefined"?GROUP_ORDER:[]).forEach(function(groupName, idx){
+    var members = (typeof GROUPED_PROFILES!=="undefined" && GROUPED_PROFILES[groupName]) ? GROUPED_PROFILES[groupName] : {};
+    var ids = Object.keys(members);
+    if (!ids.length) return;
+
+    var h = document.createElement('header');
+    h.className = (idx===0?"mb-6":"mb-6 mt-16") + " max-w-3xl text-center z-10";
+    h.innerHTML = '<p class="text-gray-500 tracking-widest text-sm">- '+groupName+' -</p>';
+    roster.appendChild(h);
+
+    var main = document.createElement('main');
+    main.className = "flex flex-col sm:flex-row gap-10 z-10 mb-8 flex-wrap justify-center";
+    ids.forEach(function(id){
+      main.appendChild(makeCard(id, members[id]));
+    });
+    roster.appendChild(main);
+  });
+
+  // Information — from INFORMATION_LINKS in config.js
+  if (typeof INFORMATION_LINKS!=="undefined" && INFORMATION_LINKS.length){
+    var h2 = document.createElement('header');
+    h2.className = "mb-6 mt-16 max-w-3xl text-center z-10";
+    h2.innerHTML = '<p class="text-gray-500 tracking-widest text-sm">- Information -</p>';
+    roster.appendChild(h2);
+    var m2 = document.createElement('main');
+    m2.className = "flex flex-col sm:flex-row gap-10 z-10 flex-wrap justify-center";
+    INFORMATION_LINKS.forEach(function(l){ m2.appendChild(makeInfoCard(l)); });
+    roster.appendChild(m2);
+  }
+
+  // if roster empty (config not loaded), show fallback
+  if (!roster.children.length){
+    roster.innerHTML = '<p class="text-gray-500 text-sm">No profiles found — check js/config.js</p>';
+  }
+
+  // direct /name or #/name on index → forward to profile
+  try{
+    var direct = (typeof nameFromUrl==="function")?nameFromUrl():"";
+    if(direct && typeof findNodeIdx==="function" && findNodeIdx(direct)!==-1){
+      var isProfilePath = /profile\.html/i.test(location.pathname);
+      if(!isProfilePath){
+        var target = location.protocol==="file:" ? "profile.html#/"+encodeURIComponent(direct) : "/profile.html?user="+encodeURIComponent(direct);
+        var p=(location.pathname||"").replace(/\/+$/,""); var hh=(location.hash||"").replace(/^#\/?/,"").trim();
+        if(p!==""&&p!=="/" || hh) location.replace(target);
+      }
+    }
+  }catch(e){}
+})();
+</script>
 
 <script>
   function startTypewriter() {
@@ -238,7 +237,7 @@
     flakes.forEach((flake, i) => {
       flake.y += flake.speed * delta;
       flake.el.style.transform = `translateY(${flake.y}px)`;
-      if (flake.y > window.innerHeight + 2300) {
+      if (flake.y > window.innerHeight + 2000) {
         flake.el.remove();
         flakes.splice(i, 1);
       }
@@ -249,28 +248,67 @@
 
   const titles = ["2","23","238","2382","23826","2382","238","23"];
   let tIndex = 0;
-  setInterval(() => {
+  let titleInt = setInterval(() => {
     document.title = titles[tIndex];
     tIndex = (tIndex + 1) % titles.length;
   }, 300);
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) clearInterval(titleInt);
+    else titleInt = setInterval(()=>{ document.title=titles[tIndex]; tIndex=(tIndex+1)%titles.length; },300);
+  });
 
   const enterScreen = document.getElementById('enter-screen');
   const music = document.getElementById('bg-music');
-  music.volume = 0.2;
+  const volIdx = document.getElementById('volume-slider-index');
+  const volValIdx = document.getElementById('volume-val-index');
+  // restore volume
+  try{
+    var saved = localStorage.getItem('whbf_volume');
+    if(saved!==null){ music.volume = Math.max(0,Math.min(1,parseFloat(saved))); volIdx.value = music.volume; }
+    else music.volume = 0.2;
+  }catch(e){ music.volume=0.2; }
+  function setPct(el, v){ el.style.setProperty('--pct', (v*100)+'%'); }
+  if(volValIdx) volValIdx.textContent = Math.round(music.volume*100)+'%';
+  if(volIdx){ setPct(volIdx, music.volume); volIdx.addEventListener('input', function(){
+      music.volume = parseFloat(this.value);
+      setPct(this, music.volume);
+      if(volValIdx) volValIdx.textContent = Math.round(music.volume*100)+'%';
+      try{ localStorage.setItem('whbf_volume', String(music.volume)); }catch(e){}
+      // icon muted state
+      var ic=document.getElementById('vol-icon-index'); if(ic) ic.classList.toggle('muted', music.volume===0);
+    });
+    // mute toggle
+    var volIcon=document.getElementById('vol-icon-index');
+    if(volIcon){
+      function toggleMute(){
+        if(music.volume>0){ volIdx.dataset.prev=String(music.volume); music.volume=0; volIdx.value=0; }
+        else { var prev=parseFloat(volIdx.dataset.prev||'0.2'); music.volume=prev; volIdx.value=prev; }
+        setPct(volIdx, music.volume);
+        if(volValIdx) volValIdx.textContent = Math.round(music.volume*100)+'%';
+        volIcon.classList.toggle('muted', music.volume===0);
+        try{ localStorage.setItem('whbf_volume', String(music.volume)); }catch(e){}
+      }
+      volIcon.addEventListener('click', toggleMute);
+      volIcon.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleMute(); }});
+    }
+  }
 
   enterScreen.addEventListener('click', () => {
-    music.play();
+    music.play().catch(function(){});
     startTypewriter();
     enterScreen.style.opacity = '0';
     enterScreen.style.pointerEvents = 'none';
     setTimeout(() => enterScreen.remove(), 400);
   });
+  // keyboard enter
+  enterScreen.setAttribute('tabindex','0'); enterScreen.setAttribute('role','button'); enterScreen.setAttribute('aria-label','Enter site');
+  enterScreen.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterScreen.click(); }});
 
   fetch('whbfascii.txt')
     .then(res => res.text())
     .then(art => {
       console.log(`%c${art}`, "color:#000; font-family:monospace; font-size:14px;");
-    });
+    }).catch(function(){});
 </script>
 
 </body>
